@@ -1,3 +1,8 @@
+[![language](https://img.shields.io/static/v1?label=language&message=4d&color=blue)](https://developer.4d.com/)
+[![language](https://img.shields.io/github/languages/top/vdelachaux/Regex-with-Classes.svg)](https://developer.4d.com/)
+![code-size](https://img.shields.io/github/languages/code-size/vdelachaux/Regex-with-Classes.svg)
+[![license](https://img.shields.io/github/license/vdelachaux/Regex-with-Classes)](LICENSE)
+
 # Regex-with-Classes
 
 The goal of this class is to reduce the complexity of code to use Regex in 4D.
