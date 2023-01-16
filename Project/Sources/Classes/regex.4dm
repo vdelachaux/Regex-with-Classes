@@ -161,10 +161,19 @@ Function match($start; $all : Boolean) : Boolean
 	// Count the words in a string
 Function countWords($target : Text) : Integer
 	
-	This:C1470.target:=Length:C16($target)>0 ? $target : This:C1470.target
+	This:C1470.target:=$target || This:C1470.target
 	This:C1470.pattern:="(?mi-s)((?:[^[:punct:]\\$\\s[:cntrl:]'‘’]+[’'][^[:punct:]\\$\\s[:cntrl:]'‘’]+)|[^[:punct:]\\s[:cntrl:]'‘’\\$]+)"
 	
 	return This:C1470.extract().length
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Validate an email address
+Function validateMail($target : Text) : Boolean
+	
+	This:C1470.target:=$target || This:C1470.target
+	This:C1470.pattern:="^([-a-zA-Z0-9_]+(?:\\.[-a-zA-Z0-9_]+)*)(?:@)([-a-zA-Z0-9\\._]+(?:\\.[a-zA-Z0-9]{2,}"+")+)$"
+	
+	return This:C1470.match()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function extract($groups) : Collection
@@ -293,13 +302,11 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	
 	var $backup; $methodCalledOnError; $replacedText; $subexpression : Text
 	var $match : Boolean
-	var $begin; $i; $sub; $index; $start : Integer
+	var $i; $sub; $index; $start : Integer
 	var $o : Object
 	
 	ARRAY LONGINT:C221($lengths; 0)
 	ARRAY LONGINT:C221($positions; 0)
-	
-	$begin:=Milliseconds:C459
 	
 	// Todo:Manage count and position
 	
@@ -407,8 +414,6 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	End if 
 	
 	This:C1470._errorCatch($methodCalledOnError)
-	
-	This:C1470.time:=Milliseconds:C459-$begin
 	
 	return $replacedText
 	
