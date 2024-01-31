@@ -49,3 +49,6 @@ Thumbs.db
 # Added by user
 #--------------------------------
 Resources/php.ini
+Libraries/lib4d-arm64.dylib
+Project/Sources/Methods/Method[0123456789]*.4dm
+Project/Sources/dependencies.json

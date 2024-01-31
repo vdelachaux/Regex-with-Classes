@@ -418,6 +418,34 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	return $replacedText
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function stripTags($target : Text) : Text
+	
+	var $len; $pos : Integer
+	
+	$target:=$target || This:C1470.target
+	
+	$target:=Replace string:C233($target; "</p><p>"; " ")
+	
+	While (Match regex:C1019("(?mi-s)<[^>]*>"; $target; 1; $pos; $len))
+		
+		$target:=Delete string:C232($target; $pos; $len)
+		
+	End while 
+	
+	$target:=Replace string:C233($target; "\r\n"; "\n")
+	$target:=Replace string:C233($target; "\n\n"; "\n")
+	$target:=Replace string:C233($target; "\n"; " ")
+	$target:=Replace string:C233($target; "\t"; " ")
+	
+	While (Position:C15("  "; $target)>0)
+		
+		$target:=Replace string:C233($target; "  "; " ")
+		
+	End while 
+	
+	return $target
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _init()
 	
 	This:C1470.success:=False:C215
