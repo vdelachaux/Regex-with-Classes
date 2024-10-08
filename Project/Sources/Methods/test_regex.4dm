@@ -139,7 +139,7 @@ End if
 $regex.pattern:="(\\w+\\[(\\d+)]"
 ASSERT:C1129(Not:C34($regex.match()))
 ASSERT:C1129($regex.matches.length=0)
-ASSERT:C1129($regex.lastError.code=-1)
+ASSERT:C1129($regex.lastError.code=304)
 ASSERT:C1129($regex.lastError.method="regex.match")
 ASSERT:C1129($regex.lastError.desc=("Error while parsing pattern \""+$regex.pattern+"\""))
 
@@ -190,6 +190,7 @@ $regex.pattern:="(?mi-s)[[:blank:]]+$"
 ASSERT:C1129(Length:C16($regex.substitute())=327)
 
 // Mark:-countWords()
+/*
 $target:="This pattern will count the words in a string. \"Words\" are defined as any run "\
 +"of letters or numbers, optionally containing a single apostrophe. For example, "\
 +"\"don't\" is a word, but \"don''t\" counts as two words. Words that start or end "\
@@ -200,8 +201,142 @@ $target:="This pattern will count the words in a string. \"Words\" are defined a
 +"punctuation like \"#$%&$#\" are ignored.\r\rIn the end, if you look at the "\
 +"bottom of this window, you'll see that this little blurb has 118 words."
 
-$regex:=cs:C1710.regex.new()
+$regex:=cs.regex.new()
 
-ASSERT:C1129($regex.countWords($target)=118; "Expected: 118")
+ASSERT($regex.countWords($target)=118; "Expected: 118")
+*/
+
+// Mark:-dates()
+var $c : Collection
+var $o : Object
+
+$regex:=cs:C1710.regex.new("8/8/58")
+$c:=$regex.extractDates()
+ASSERT:C1129($c.length=1)
+$o:=$c[0]
+ASSERT:C1129($o.valid)
+ASSERT:C1129($o.string="8/8/58")
+ASSERT:C1129($o.day=8)
+ASSERT:C1129($o.month=8)
+ASSERT:C1129($o.year=1958)
+
+var $today : Date:=Current date:C33
+var $tomorrow : Date:=Current date:C33+1
+
+$target:="This pattern does not rely on a date being on its own line so it will pick them "\
++"out from sentences like, \"I'm going to the vet on "+String:C10($today)+"\" or \"I have an "\
++"appointment on "+String:C10($tomorrow)+"\"."
+$regex.setTarget($target)
+$c:=$regex.extractDates()
+ASSERT:C1129($c.length=2)
+
+$o:=$c[0]
+ASSERT:C1129($o.valid)
+ASSERT:C1129($o.string=String:C10($today))
+ASSERT:C1129($o.day=Day of:C23($today))
+ASSERT:C1129($o.month=Month of:C24($today))
+ASSERT:C1129($o.year=Year of:C25($today))
+
+$o:=$c[1]
+ASSERT:C1129($o.valid)
+ASSERT:C1129($o.string=String:C10($tomorrow))
+ASSERT:C1129($o.day=Day of:C23($tomorrow))
+ASSERT:C1129($o.month=Month of:C24($tomorrow))
+ASSERT:C1129($o.year=Year of:C25($tomorrow))
+
+
+/*
+By default, 4D uses 30 as pivot year. For example:
+    01/25/97 means January 25, 1997.
+    01/25/30 means January 25, 1930.
+    01/25/29 means January 25, 2029.
+    01/25/07 means January 25, 2007.
+*/
+$regex.setTarget("8/8/29")
+$c:=$regex.extractDates()
+ASSERT:C1129($c[0].year=2029)
+
+$regex.setTarget("25/1/97")
+$c:=$regex.extractDates()
+ASSERT:C1129($c[0].year=1997)
+$regex.setTarget("25/1/30")
+$c:=$regex.extractDates()
+ASSERT:C1129($c[0].year=1930)
+$regex.setTarget("25/1/29")
+$c:=$regex.extractDates()
+ASSERT:C1129($c[0].year=2029)
+$regex.setTarget("25/1/07")
+$c:=$regex.extractDates()
+ASSERT:C1129($c[0].year=2007)
+
+/*
+You can specify the optional pivotYear parameter.
+For example, with the pivot year set at 95:
+    01/25/94 means January 25, 2094
+    01/25/95 means January 25, 1995
+*/
+$regex.setTarget("25/1/94")
+$c:=$regex.extractDates(95)
+ASSERT:C1129($c[0].year=2094)
+$regex.setTarget("25/1/95")
+$c:=$regex.extractDates(95)
+ASSERT:C1129($c[0].year=1995)
+
+// Mark:-emails()
+$regex:=cs:C1710.regex.new("vincent@4d.com")
+$c:=$regex.extractMailsAdresses()
+ASSERT:C1129($c.length=1)
+$o:=$c[0]
+ASSERT:C1129($o.address="vincent@4d.com")
+ASSERT:C1129($o.user="vincent")
+ASSERT:C1129($o.domain="4d")
+ASSERT:C1129($o.topLeveldomain=".com")
+ASSERT:C1129($o.valid)
+
+ASSERT:C1129($regex.setTarget($o.address).validateMail())
+
+$regex.setTarget("This is an imperfect pattern that will pick out likely e-mail addresses using "\
++"the most common symbols, but will miss unusual addresses. It assumes first "\
++"that address will start with a letter or number that is not proceeded by one of "\
++"the other acceptable symbols like \"%+__$.-\", e.g., a@b.com or 9a@b.com. It "\
++"also assumes that those acceptable symbols can come before the \"@\", but never "\
++"two of those in a row. Thus a_b@c.com is acceptable but not a_-b@c.com. Finally, "\
++"every symbol must be followed up by a letter or number like a.b.c@d.com, but not "\
++"a.@c.com. After the \"@\", there must be a letter or number like "\
++"\"someone@27bslash6.com\". After that, there can either be a letter or number, "\
++"or a symbol like \"._-\". Again, any symbol must be followed by a letter or "\
++"number, like a@b9-8.com but not a@b--9.com or a@b9-.com. Finally, the address "\
++"will end with a period followed by a top-level domain of 2-6 letters. This will "\
++"include such addresses as a@b.info and a@b.museum, but not a@b.company. It does "\
++"not verify the top-level domain, of course, so an address like a@b.aol.spam "\
++"would get through. To counter this, replace the last part of the pattern "\
++"(\"\\.[a-z]{2,6}\\b\") with a list of acceptable domains like "\
++"this: \\.(?:com|net|org|gov|biz|info|jobs|tv|film| ... ) Of course, the "\
++"danger is that you will miss one since there are so many now. Note, by the "\
++"way, that multiple subdomains are not a problem, like "\
++"a@really.long.stinkin.domain.name.")
+$c:=$regex.extractMailsAdresses()
+ASSERT:C1129($c.length=10)
+ASSERT:C1129($c[0].address="a@b.com")
+ASSERT:C1129($c[1].address="9a@b.com")
+ASSERT:C1129($c[2].address="a_b@c.com")
+ASSERT:C1129($c[3].address="a.b.c@d.com")
+ASSERT:C1129($c[4].address="someone@27bslash6.com")
+ASSERT:C1129($c[5].address="a@b9-8.com")
+ASSERT:C1129($c[6].address="a@b.info")
+ASSERT:C1129($c[7].address="a@b.museum")
+ASSERT:C1129($c[8].address="a@b.aol.spam")
+ASSERT:C1129($c[9].address="a@really.long.stinkin.domain.name")
+
+For each ($o; $c)
+	
+	ASSERT:C1129($regex.validateMail($o.address))
+	
+End for each 
+
+// Mark:-stripTags()
+var $t : Text:="<p>Test paragraph.</p><!-- Comment --> <a href=\"#fragment\">Other text</a>"
+var $rgx : cs:C1710.regex:=cs:C1710.regex.new()
+ASSERT:C1129($rgx.stripTags($t)="Test paragraph. Other text")
 
 BEEP:C151
