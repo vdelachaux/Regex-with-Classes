@@ -18,24 +18,40 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 |**matches**|`Collection`|The match list of the extracted segments during the last operation (see below)|**Null**|✔️
 |**searchTime**|`Integer`|The time, in milliseconds, to execute the last regex function.|**0**|
 
-### Functions
-> 📌 The "setXXX" functions returns the original `cs.regex` object, so you can include one call after another (See [substitute ()](#substitute) example).
+### Options
+|Properties|Type| |Initial value|
+|:---------|:----:|------|:------:
+|**caseSensitve**|`Boolean`|If True, search will be case-sensitive. `(?-i)`| **False** |
+|**treatTargetAsOneLine**|`Boolean`|If True, “\^” and “\$” will also match at the start and end of each line within the input text. `(?-m)`| **False** |
+|**dotMatchNewLine**|`Boolean`|If True, dot in a pattern will match a line terminator in the input text. `(?s)`| **False** |
+|**allowSpaceAndComments**|`Boolean`|If True, allow use of white space and #comments within patterns. `(?x)`| **False** |
+
+###  Set functions
+
+> 📌 These functions returns the original `cs.regex` object, so you can include one call after another (See [substitute ()](#substitute) example).
 
 |Functions| |
 |:--------|------|  
 |.**setTarget** (target) : `cs.regex`|Defines the string on which the next operations will be performed.<br/>`target` can be a `Text`, a `Blob` or a `4D.File`.
 |.**setPattern** (pattern : `Text`) : `cs.regex`|Defines the pattern to use for future operations.
+|.**setOptions** (option : `Integer`) : `cs.regex`|Sets options all at once.<br>`options` supports the first 4 bits of the value:<br>   - bit 0 = Case sensitive<br>   - bit 1 = Treat target as one line<br>   - bit 2 = Dot match new line<br>   - bit 3 = Allow spaces & comments
+
+
+###  Regex functions
+
+|Functions| |
+|:--------|------|  
 |.**[match](#match)** () : `Boolean`|Returns **True** if the pattern matches the string.
 |.**[extract](#extract)** ({group}) : `Collection`|Returns the list of texts extracted based on the pattern definition
 |.**[substitute](#substitute)** ({replacement: `Text`}) : `Text`|Returns the result of the replacement in the target string
 |.**lookingAt**() : `Boolean`| Returns **True** if the pattern against the target string matches at the start of the string.
 |.**start** ({index : `Integer`}) : `Integer`| Returns the position of the start of the nth matched region in the target string.\*
 |.**end** ({index : `Integer`}) : `Integer`| Returns the position of the first character following the text matched by the nth capture group.\*
-|.**length** ({index : `Integer`}) : `Integer`| Return the length of the nth match.\*
-|.**group** ({index : `Integer`}) : `Text`| Return the text that was matched by the nth capture group.\*
+|.**length** ({index : `Integer`}) : `Integer`| Returns the length of the nth match.\*
+|.**group** ({index : `Integer`}) : `Text`| Returns the text that was matched by the nth capture group.\*
 |.**[escape](#escape)** (`Text`) : `Text`| Escapes a minimal set of characters.
 
-\* First match if `index` is omitted. Only availbale after `match()`, `extract()` or `substitute()`
+\* First match if `index` is omitted. Applicable only after calling a `match()`, `extract()` or `substitute()` function.
 
 > 📌 The `match()`, `extract()` & `substitute()` functions populates the `matches` property.     
 > The first element of the collection contain the whole pattern match, and the others matched subpatterns, if any.     

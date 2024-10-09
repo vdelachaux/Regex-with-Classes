@@ -6,6 +6,7 @@ property errors : Collection
 property _target : Text:=""
 property _pattern : Text:=""
 property _startTime : Integer
+property _options : Integer:=0
 
 Class constructor($target; $pattern : Text)
 	
@@ -116,6 +117,109 @@ Function setPattern($pattern : Text) : cs:C1710.regex
 	
 	return This:C1470
 	
+	// MARK:-[OPTIONS]
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
+Function get caseSensitve() : Boolean
+	
+	return This:C1470._options ?? 0
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// If True, search will be case-sensitive. (?-i)
+Function set caseSensitve($on : Boolean)
+	
+	This:C1470._options:=$on ? This:C1470._options ?+ 0 : This:C1470._options ?- 0
+	
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
+Function get treatTargetAsOneLine() : Boolean
+	
+	return This:C1470._options ?? 1
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function set treatTargetAsOneLine($on : Boolean)
+	
+	This:C1470._options:=$on ? This:C1470._options ?+ 1 : This:C1470._options ?- 1
+	
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
+Function get dotMatchNewLine() : Boolean
+	
+	return This:C1470._options ?? 2
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function set dotMatchNewLine($on : Boolean)
+	
+	This:C1470._options:=$on ? This:C1470._options ?+ 2 : This:C1470._options ?- 2
+	
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
+Function get allowSpaceAndComments() : Boolean
+	
+	return This:C1470._options ?? 3
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// If True, allow use of white space and #comments within patterns. (?x)
+Function set allowSpaceAndComments($on : Boolean)
+	
+	This:C1470._options:=$on ? This:C1470._options ?+ 3 : This:C1470._options ?- 3
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setOptions($options : Integer) : cs:C1710.regex
+	
+	This:C1470._options:=$options
+	
+	return This:C1470
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _setOptions($pattern : Text) : Text
+	
+	var $on : Collection:=[]
+	var $of : Collection:=[]
+	
+	If (This:C1470._options ?? 0)
+		
+		$of.push("i")  // (?-i)
+		
+	Else 
+		
+		$on.push("i")  // (?i)
+		
+	End if 
+	
+	If (This:C1470._options ?? 1)
+		
+		$of.push("m")  // (?-m)
+		
+	Else 
+		
+		$on.push("m")  // (?m)
+		
+	End if 
+	
+	If (This:C1470._options ?? 2)
+		
+		$on.push("s")  // (?s)
+		
+	End if 
+	
+	If (This:C1470._options ?? 3)
+		
+		$on.push("x")  // (?x)
+		
+	End if 
+	
+	var $options : Text:="(?"+$on.join("")
+	
+	$options:="(?"
+	$options+=$on.join("")
+	
+	If ($of.length>0)
+		
+		$options+=" -"+$of.join("")
+		
+	End if 
+	
+	$options+=")"
+	
+	return $options+$pattern
+	
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the pattern matches the target.
@@ -148,9 +252,11 @@ Function match($start; $all : Boolean) : Boolean
 	
 	This:C1470._init()
 	
+	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
+	
 	Repeat 
 		
-		var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $pos; $len))
+		var $match : Boolean:=Try(Match regex:C1019($pattern; This:C1470._target; $start; $pos; $len))
 		
 		If (Last errors:C1799.length>0)
 			
@@ -262,11 +368,12 @@ Function extract($groups) : Collection
 	ARRAY LONGINT:C221($len; 0)
 	ARRAY LONGINT:C221($pos; 0)
 	
+	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
 	var $start : Integer:=1
 	
 	Repeat 
 		
-		var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $pos; $len; *))
+		var $match : Boolean:=Try(Match regex:C1019($pattern; This:C1470._target; $start; $pos; $len; *))
 		
 		If (Last errors:C1799.length>0)
 			
@@ -342,11 +449,12 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	
 	This:C1470._init()
 	
+	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
 	var $start : Integer:=1
 	
 	Repeat 
 		
-		var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $pos; $len))
+		var $match : Boolean:=Try(Match regex:C1019($pattern; This:C1470._target; $start; $pos; $len))
 		
 		If (Last errors:C1799.length>0)
 			
@@ -448,12 +556,18 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	return $replacedText
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Alias of substitute 
+Function replace($replacement : Text; $count : Integer; $position : Integer) : Text
+	
+	return This:C1470.substitute($replacement; $count; $position)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the pattern matches at the start of the string
 Function lookingAt() : Boolean
 	
 	This:C1470._init()
 	
-	var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; 1; *))
+	var $match : Boolean:=Try(Match regex:C1019(This:C1470._setOptions(This:C1470._pattern); This:C1470._target; 1; *))
 	
 	If (Last errors:C1799.length>0)
 		
@@ -468,6 +582,11 @@ Function lookingAt() : Boolean
 	This:C1470.searchTime:=This:C1470._elapsedTime()
 	
 	return This:C1470.success
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function split() : Collection
+	
+	// TODO:split with regex ?
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Returns the number of pattern matches with the target

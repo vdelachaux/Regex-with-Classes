@@ -3,6 +3,29 @@ var $pattern; $target : Text
 var $result : Collection
 var $rgx : cs:C1710.regex
 
+
+// Mark:-Options
+$rgx:=cs:C1710.regex.new("Hello world, the world is wonderful but the world is in danger"; "WORLD")
+ASSERT:C1129($rgx.match())
+
+$rgx.caseSensitve:=True:C214
+ASSERT:C1129(Not:C34($rgx.match()))
+
+$rgx.dotMatchNewLine:=True:C214
+ASSERT:C1129(Not:C34($rgx.match()))
+
+$rgx.treatTargetAsOneLine:=True:C214
+ASSERT:C1129(Not:C34($rgx.match()))
+
+$rgx.allowSpaceAndComments:=True:C214
+ASSERT:C1129(Not:C34($rgx.match()))
+
+$rgx.caseSensitve:=False:C215
+$rgx.dotMatchNewLine:=False:C215
+$rgx.treatTargetAsOneLine:=False:C215
+$rgx.allowSpaceAndComments:=False:C215
+ASSERT:C1129($rgx.match())
+
 // Mark:-match()
 $rgx:=cs:C1710.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")
 
