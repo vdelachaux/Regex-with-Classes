@@ -45,8 +45,8 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 
 |Functions| |
 |:--------|------|  
-|.**[extractDates](#extractDates)** () : `Collection`| Extracts & validate dates from a string.
-|.**[extractMailsAdresses](#extractMailsAdresses)** () : `Collection `| Extracts emails from a text.
+|.**[extractDates](#dates)** () : `Collection`| Extracts & validate dates from a string.
+|.**[extractMailsAdresses](#mails)** () : `Collection `| Extracts emails from a text.
 |.**validateMail** (email : `Text`) : `Boolean`| Validate an e-mail address
 |.**stripTags** (in : `Text`) : `Text`|Returns a string with all HTML and PHP tags removed. Equivalent of PHP `strip_tags`
 
@@ -225,7 +225,7 @@ $rgx.match(True)
 The function escapes the left bracket `[` and the opening brace `{`, but not their corresponding closing characters `]` and `}`. In most cases, it is not necessary to escape them. If a closing bracket or brace is not preceded by its corresponding opening character, the regular expression engine interprets it literally.
 
 
-## 🔹<a name="extractDates">extractDates ()</a>
+## 🔹<a name="dates">extractDates ()</a>
 
 > .**extractDates**() : `Collection`    
 > .**extractDates**( target: `Text` ) : `Collection`    
@@ -261,7 +261,7 @@ cs.regex.new("01/25/94"; 95).extractDates[0].year  // return 2094
 cs.regex.new("01/25/95"; 95).extractDates[0].year  // return 1995
 ```
 
-## 🔹<a name="extractMailsAdresses">extractMailsAdresses ()</a>
+## 🔹<a name="mails">extractMailsAdresses ()</a>
 
 > .**extractMailsAdresses**() : `Collection`    
 > .**extractMailsAdresses**( target: `Text` ) : `Collection`    
