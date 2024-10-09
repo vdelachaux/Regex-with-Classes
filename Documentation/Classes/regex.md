@@ -45,10 +45,10 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 
 |Functions| |
 |:--------|------|  
-|.**[validateMail](#validateMail)** (email : `Text`) : `Boolean`| Validate an e-mail address
-|.**[stripTags](#stripTags)** (in : `Text`) : `Text`|Returns a string with all HTML and PHP tags removed. Equivalent of PHP `strip_tags`)
 |.**[extractDates](#extractDates)** () : `Collection`| Extracts & validate dates from a string.
 |.**[extractMailsAdresses](#extractMailsAdresses)** () : `Collection `| Extracts emails from a text.
+|.**validateMail** (email : `Text`) : `Boolean`| Validate an e-mail address
+|.**stripTags** (in : `Text`) : `Text`|Returns a string with all HTML and PHP tags removed. Equivalent of PHP `strip_tags`
 
 ## 🔸 cs.regex.new()
 
