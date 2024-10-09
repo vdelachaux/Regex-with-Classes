@@ -33,7 +33,7 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 |.**end** ({index : `Integer`}) : `Integer`| Returns the position of the first character following the text matched by the nth capture group.\*
 |.**length** ({index : `Integer`}) : `Integer`| Return the length of the nth match.\*
 |.**group** ({index : `Integer`}) : `Text`| Return the text that was matched by the nth capture group.\*
-|.**[escape](escape)** (`Text`) : `Text`| Escapes a minimal set of characters.
+|.**[escape](#escape)** (`Text`) : `Text`| Escapes a minimal set of characters.
 
 \* First match if `index` is omitted. Only availbale after `match()`, `extract()` or `substitute()`
 
@@ -45,10 +45,10 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 
 |Functions| |
 |:--------|------|  
-|.**[validateMail](validateMail)** (email : `Text`) : `Boolean`| Validate an e-mail address
-|.**[stripTags](stripTags)** (in : `Text`) : `Text`|Returns a string with all HTML and PHP tags removed. Equivalent of PHP `strip_tags`)
-|.**[extractDates](extractDates)** () : `Collection`| Extracts & validate dates from a string.
-|.**[extractMailsAdresses](extractMailsAdresses)** () : `Collection `| Extracts emails from a text.
+|.**[validateMail](#validateMail)** (email : `Text`) : `Boolean`| Validate an e-mail address
+|.**[stripTags](#stripTags)** (in : `Text`) : `Text`|Returns a string with all HTML and PHP tags removed. Equivalent of PHP `strip_tags`)
+|.**[extractDates](#extractDates)** () : `Collection`| Extracts & validate dates from a string.
+|.**[extractMailsAdresses](#extractMailsAdresses)** () : `Collection `| Extracts emails from a text.
 
 ## 🔸 cs.regex.new()
 
@@ -79,7 +79,73 @@ Both parameters are optional and can be passed alone or together.
 >📌 If `start` is passed and `all` is **True**, the capture starts at the desired position and subsequent hits are returned if any.
 
 ```4d
-$rgx:=cs.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")// Test first occurrenceIf ($rgx.match())		ASSERT($rgx.count=1)	ASSERT($rgx.group()="world")	ASSERT($rgx.start()=7)	ASSERT($rgx.length()=5)	ASSERT($rgx.end()=13)	End if // Starts search at 10th characterIf ($rgx.match(10))		ASSERT($rgx.count=1)	ASSERT($rgx.group()="world")	ASSERT($rgx.start()=18)	ASSERT($rgx.length()=5)	ASSERT($rgx.end()=24)	End if // Retrieves all occurrencesIf ($rgx.match(True))		ASSERT($rgx.count=3)		ASSERT($rgx.group()="world")	ASSERT($rgx.start()=7)	ASSERT($rgx.length()=5)	ASSERT($rgx.end()=13)		ASSERT($rgx.group(1)="world")	ASSERT($rgx.start(1)=7)	ASSERT($rgx.length(1)=5)	ASSERT($rgx.end(1)=13)		ASSERT($rgx.group(2)="world")	ASSERT($rgx.start(2)=18)	ASSERT($rgx.length(2)=5)	ASSERT($rgx.end(2)=24)		ASSERT($rgx.group(3)="world")	ASSERT($rgx.start(3)=45)	ASSERT($rgx.length(3)=5)	ASSERT($rgx.end(3)=51)	End if // Starts search at 10th character & retrieves all next occurencesIf ($rgx.match(10; True))		ASSERT($rgx.count=2)		ASSERT($rgx.group(1)="world")	ASSERT($rgx.start(1)=18)	ASSERT($rgx.length(1)=5)	ASSERT($rgx.end(1)=24)		ASSERT($rgx.group(2)="world")	ASSERT($rgx.start(2)=45)	ASSERT($rgx.length(2)=5)	ASSERT($rgx.end(2)=51)	End if  
+$rgx:=cs.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")
+
+// Test first occurrence
+If ($rgx.match())
+	
+	ASSERT($rgx.count=1)
+	ASSERT($rgx.group()="world")
+	ASSERT($rgx.start()=7)
+	ASSERT($rgx.length()=5)
+	ASSERT($rgx.end()=13)
+	
+End if 
+
+// Starts search at 10th character
+If ($rgx.match(10))
+	
+	ASSERT($rgx.count=1)
+	ASSERT($rgx.group()="world")
+	ASSERT($rgx.start()=18)
+	ASSERT($rgx.length()=5)
+	ASSERT($rgx.end()=24)
+	
+End if 
+
+// Retrieves all occurrences
+If ($rgx.match(True))
+	
+	ASSERT($rgx.count=3)
+	
+	ASSERT($rgx.group()="world")
+	ASSERT($rgx.start()=7)
+	ASSERT($rgx.length()=5)
+	ASSERT($rgx.end()=13)
+	
+	ASSERT($rgx.group(1)="world")
+	ASSERT($rgx.start(1)=7)
+	ASSERT($rgx.length(1)=5)
+	ASSERT($rgx.end(1)=13)
+	
+	ASSERT($rgx.group(2)="world")
+	ASSERT($rgx.start(2)=18)
+	ASSERT($rgx.length(2)=5)
+	ASSERT($rgx.end(2)=24)
+	
+	ASSERT($rgx.group(3)="world")
+	ASSERT($rgx.start(3)=45)
+	ASSERT($rgx.length(3)=5)
+	ASSERT($rgx.end(3)=51)
+	
+End if 
+
+// Starts search at 10th character & retrieves all next occurences
+If ($rgx.match(10; True))
+	
+	ASSERT($rgx.count=2)
+	
+	ASSERT($rgx.group(1)="world")
+	ASSERT($rgx.start(1)=18)
+	ASSERT($rgx.length(1)=5)
+	ASSERT($rgx.end(1)=24)
+	
+	ASSERT($rgx.group(2)="world")
+	ASSERT($rgx.start(2)=45)
+	ASSERT($rgx.length(2)=5)
+	ASSERT($rgx.end(2)=51)
+	
+End if  
 ```
 ## 🔹<a name="extract">extract ()</a>
 
@@ -136,14 +202,24 @@ Escapes a minimal set of characters `\, *, +, ?, |, {, [, (, ), ^, $, ., #, and 
 For example, consider a regular expression designed to extract comments delimited by opening and closing square brackets. The pattern will be ` [(.*?)] `. Note that the opening square bracket which will be interpreted as the start of a character class. We must therefore escape this character, but not the next opening parenthesis that open a capture sequence.
 
 ```4d
-$rgx:=cs.regex.new("The animal [what kind?] was visible [by whom?] from the window.")$rgx.pattern:=$rgx.escape("[")+"(.*?)]"$rgx.match(True)// $rgx.matches[1].data = "what kind?"// $rgx.matches[3].data = "by whom?" 
+$rgx:=cs.regex.new("The animal [what kind?] was visible [by whom?] from the window.")
+$rgx.pattern:=$rgx.escape("[")+"(.*?)]"
+
+$rgx.match(True)
+// $rgx.matches[1].data = "what kind?"
+// $rgx.matches[3].data = "by whom?" 
 ```
 
 Without escapement, the result would have been as follows:
 
 ```
-$rgx:=cs.regex.new("The animal [what kind?] was visible [by whom?] from the window.")$rgx.pattern:="[(.*?)]"$rgx.match(True)
-// $rgx.matches[1].data = "?"// $rgx.matches[3].data = "?" // $rgx.matches[5].data = "." 
+$rgx:=cs.regex.new("The animal [what kind?] was visible [by whom?] from the window.")
+$rgx.pattern:="[(.*?)]"
+
+$rgx.match(True)
+// $rgx.matches[1].data = "?"
+// $rgx.matches[3].data = "?" 
+// $rgx.matches[5].data = "." 
 ```
 
 The function escapes the left bracket `[` and the opening brace `{`, but not their corresponding closing characters `]` and `}`. In most cases, it is not necessary to escape them. If a closing bracket or brace is not preceded by its corresponding opening character, the regular expression engine interprets it literally.
@@ -156,19 +232,33 @@ The function escapes the left bracket `[` and the opening brace `{`, but not the
 > .**extractDates**( pivotYear: `Integer` ) : `Collection`    
 > .**extractDates** (target: `Text` ; pivotYear: `Integer` ) : `Collection`
 
-Extracts & validate dates from a string.			The result is a collection of date objects:
-```json		
-{  string: Text,       // The full matched date string
-  value: Date,        // The date value  day: Integer,  month:  Integer,  year: Integer,  separator: Text,   // The date separator found  valid: Boolean     // True if date is valid}
+Extracts & validate dates from a string.
+			
+The result is a collection of date objects:
+
+```json		
+{
+  string: Text,       // The full matched date string
+  value: Date,        // The date value
+  day: Integer,
+  month:  Integer,
+  year: Integer,
+  separator: Text,   // The date separator found
+  valid: Boolean     // True if date is valid
+}
 ```
 By default, like 4D, the function uses 30 as the pivot year. For example:
 
 ```4d
-cs.regex.new("8/8/29").extractDates[0].year  // return 2029cs.regex.new("25/1/30").extractDates[0].year  // return 1930
-```			You can specify the optional pivotYear parameter. For example, with the pivot year set at 95:
+cs.regex.new("8/8/29").extractDates[0].year  // return 2029
+cs.regex.new("25/1/30").extractDates[0].year  // return 1930
+```
+			
+You can specify the optional pivotYear parameter. For example, with the pivot year set at 95:
 
 ```4d
-cs.regex.new("01/25/94"; 95).extractDates[0].year  // return 2094cs.regex.new("01/25/95"; 95).extractDates[0].year  // return 1995
+cs.regex.new("01/25/94"; 95).extractDates[0].year  // return 2094
+cs.regex.new("01/25/95"; 95).extractDates[0].year  // return 1995
 ```
 
 ## 🔹<a name="extractMailsAdresses">extractMailsAdresses ()</a>
@@ -176,7 +266,27 @@ cs.regex.new("01/25/94"; 95).extractDates[0].year  // return 2094cs.regex.new("
 > .**extractMailsAdresses**() : `Collection`    
 > .**extractMailsAdresses**( target: `Text` ) : `Collection`    
 
-Extracts emails from a text.			The result is a collection of email objects 
+Extracts emails from a text.
+			
+The result is a collection of email objects 
 
-```json{  address: Text,  user: Text,  domain: Text,  topLeveldomain: Text,}
-```			This is an imperfect pattern that will pick out likely e-mail addresses using the most common symbols, but will miss unusual addresses.			It assumes first that address will start with a letter or number that is not proceeded by one of the other acceptable symbols like "`%+__$.-`", e.g., `a@b.com `or `9a@b.com`. It also assumes that those acceptable symbols can come before the "`@`", but never two of those in a row. Thus `a_b@c.com` is acceptable but not `a_-b@c.com`. Finally, every symbol must be followed up by a letter or number like` a.b.c@d.com`, but not `a.@c.com`.			After the "`@`", there must be a letter or number like `someone@27bslash6.com`. After that, there can either be a letter or number, or a symbol like "`._-`". Again, any symbol must be followed by a letter or number, like `a@b9-8.com` but not `a@b--9.com` or `a@b9-.com`. Finally, the address will end with a period followed by a top-level domain of 2-6 letters. 			This will include such addresses as `a@b.info` and `a@b.museum`, but not `a@b.company.` It does not verify the top-level domain, of course, so an address like `a@b.aol.spam` would get through. 			Note, by the way, that multiple subdomains are not a problem, like `a@really.long.stinkin.domain.name`.
+```json
+{
+  address: Text,
+  user: Text,
+  domain: Text,
+  topLeveldomain: Text,
+}
+```
+			
+This is an imperfect pattern that will pick out likely e-mail addresses using the most common symbols, but will miss unusual addresses.
+			
+It assumes first that address will start with a letter or number that is not proceeded by one of the other acceptable symbols like "`%+__$.-`", e.g., `a@b.com `or `9a@b.com`. It also assumes that those acceptable symbols can come before the "`@`", but never two of those in a row. Thus `a_b@c.com` is acceptable but not `a_-b@c.com`. Finally, every symbol must be followed up by a letter or number like` a.b.c@d.com`, but not `a.@c.com`.
+			
+After the "`@`", there must be a letter or number like `someone@27bslash6.com`. After that, there can either be a letter or number, or a symbol like "`._-`". Again, any symbol must be followed by a letter or number, like `a@b9-8.com` but not `a@b--9.com` or `a@b9-.com`. Finally, the address will end with a period followed by a top-level domain of 2-6 letters. 
+			
+This will include such addresses as `a@b.info` and `a@b.museum`, but not `a@b.company.` 
+
+It does not verify the top-level domain, of course, so an address like `a@b.aol.spam` would get through. 
+			
+Note, by the way, that multiple subdomains are not a problem, like `a@really.long.stinkin.domain.name`.
