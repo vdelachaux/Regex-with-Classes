@@ -1,13 +1,24 @@
-[![language](https://img.shields.io/static/v1?label=language&message=4d&color=blue)](https://developer.4d.com/)
-[![language](https://img.shields.io/github/languages/top/vdelachaux/Regex-with-Classes.svg)](https://developer.4d.com/)
-![code-size](https://img.shields.io/github/languages/code-size/vdelachaux/Regex-with-Classes.svg)
-[![license](https://img.shields.io/github/license/vdelachaux/Regex-with-Classes)](LICENSE)
+<!-- MARKDOWN LINKS & IMAGES -->
+[release-shield]: https://img.shields.io/github/v/release/vdelachaux/Regex-with-classes?include_prereleases
+[release-url]: https://github.com/vdelachaux/Regex-with-classes/releases/latest
+[license-shield]: https://img.shields.io/github/license/vdelachaux/Regex-with-classes
+[build-shield]: https://github.com/vdelachaux/Regex-with-classes/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/vdelachaux/Regex-with-classes/actions/workflows/build.yml
+
+<!--BADGES-->
+![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components)
+<br>
+[![release][release-shield]][release-url]
+[![license][license-shield]](LICENSE)
+<img src="https://img.shields.io/github/downloads/vdelachaux/Regex-with-classes/total"/>
 
 # Regex-with-Classes
 
 The goal of this class is to reduce the complexity of code to use Regex in 4D.
 
 The complete class documentation is available [here](Documentation/Classes/regex.md) and is also displayed in the Explorer documentation panel.     
+
+
 
 The [***test_regex***](Project/Sources/Methods/test_regex.4dm) method will help you learn how to use it.
 
