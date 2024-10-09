@@ -9,6 +9,8 @@ property _startTime : Integer
 
 Class constructor($target; $pattern : Text)
 	
+	This:C1470.errors:=[]
+	
 	This:C1470._init()
 	
 	If (Count parameters:C259>=1)
@@ -44,6 +46,8 @@ Function setTarget($target) : cs:C1710.regex
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _setTarget($target)
+	
+	This:C1470.success:=True:C214
 	
 	Case of 
 			
@@ -108,6 +112,8 @@ Function setPattern($pattern : Text) : cs:C1710.regex
 	
 	This:C1470._pattern:=$pattern
 	
+	This:C1470.success:=True:C214
+	
 	return This:C1470
 	
 	// MARK:-
@@ -146,55 +152,54 @@ Function match($start; $all : Boolean) : Boolean
 		
 		var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $pos; $len))
 		
-		If (Last errors:C1799.length=0)
+		If (Last errors:C1799.length>0)
 			
-			If ($match)
-				
-				This:C1470.success:=True:C214
-				
-				For ($i; 0; Size of array:C274($pos); 1)
-					
-					This:C1470.matches.push({\
-						index: $index; \
-						data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
-						position: $pos{$i}; \
-						length: $len{$i}\
-						})
-					
-					If ($len{$i}=0)
-						
-						$match:=($i>0)
-						
-						If ($match)
-							
-							$match:=($pos{$i}#$pos{$i-1})
-							
-						End if 
-					End if 
-					
-					If ($pos{$i}>0)
-						
-						$start:=$pos{$i}+$len{$i}
-						
-					End if 
-				End for 
-				
-				If (Not:C34($all))
-					
-					break  // Stop after the first match
-					
-				End if 
-			End if 
-			
-			$index+=1
-			
-		Else 
-			
-			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; "Error while parsing pattern \""+This:C1470._pattern+"\"")
+			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; Last errors:C1799[0].message)
 			
 			return 
 			
 		End if 
+		
+		If ($match)
+			
+			This:C1470.success:=True:C214
+			
+			For ($i; 0; Size of array:C274($pos); 1)
+				
+				This:C1470.matches.push({\
+					index: $index; \
+					data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
+					position: $pos{$i}; \
+					length: $len{$i}\
+					})
+				
+				If ($len{$i}=0)
+					
+					$match:=($i>0)
+					
+					If ($match)
+						
+						$match:=($pos{$i}#$pos{$i-1})
+						
+					End if 
+				End if 
+				
+				If ($pos{$i}>0)
+					
+					$start:=$pos{$i}+$len{$i}
+					
+				End if 
+			End for 
+			
+			If (Not:C34($all))
+				
+				break  // Stop after the first match
+				
+			End if 
+		End if 
+		
+		$index+=1
+		
 	Until (Not:C34($match))
 	
 	This:C1470.searchTime:=This:C1470._elapsedTime()
@@ -263,55 +268,53 @@ Function extract($groups) : Collection
 		
 		var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $pos; $len; *))
 		
-		If (Last errors:C1799.length=0)
+		If (Last errors:C1799.length>0)
 			
-			If ($match)
-				
-				This:C1470.success:=True:C214
-				
-				var $current : Integer:=0
-				
-				For ($i; 0; Size of array:C274($pos); 1)
-					
-					var $groupIndex : Integer:=$groups.length>0 ? $groups.indexOf(String:C10($current)) : $current
-					
-					If ($groupIndex>=0)
-						
-						If ($i>0)\
-							 | ($index=0)
-							
-							If (This:C1470.matches.query("data = :1 & pos = :2"; Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); $pos{$i}).pop()=Null:C1517)
-								
-								This:C1470.matches.push({\
-									index: $indx; \
-									data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
-									pos: $pos{$i}; \
-									len: $len{$i}\
-									})
-								
-								$indx+=1
-								
-							End if 
-						End if 
-					End if 
-					
-					If ($pos{$i}>0)
-						
-						$start:=$pos{$i}+$len{$i}
-						
-					End if 
-					
-					$current+=1
-					
-				End for 
-			End if 
-			
-		Else 
-			
-			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; "Error while parsing pattern \""+This:C1470._pattern+"\"")
+			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; Last errors:C1799[0].message)
 			
 			return 
 			
+		End if 
+		
+		If ($match)
+			
+			This:C1470.success:=True:C214
+			
+			var $current : Integer:=0
+			
+			For ($i; 0; Size of array:C274($pos); 1)
+				
+				var $groupIndex : Integer:=$groups.length>0 ? $groups.indexOf(String:C10($current)) : $current
+				
+				If ($groupIndex>=0)
+					
+					If ($i>0)\
+						 | ($index=0)
+						
+						If (This:C1470.matches.query("data = :1 & pos = :2"; Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); $pos{$i}).pop()=Null:C1517)
+							
+							This:C1470.matches.push({\
+								index: $indx; \
+								data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
+								pos: $pos{$i}; \
+								len: $len{$i}\
+								})
+							
+							$indx+=1
+							
+						End if 
+					End if 
+				End if 
+				
+				If ($pos{$i}>0)
+					
+					$start:=$pos{$i}+$len{$i}
+					
+				End if 
+				
+				$current+=1
+				
+			End for 
 		End if 
 		
 		$index+=1
@@ -345,59 +348,58 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 		
 		var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $pos; $len))
 		
-		If (Last errors:C1799.length=0)
+		If (Last errors:C1799.length>0)
 			
-			If ($match)
-				
-				var $sub : Integer:=0
-				
-				For ($i; 0; Size of array:C274($pos); 1)
-					
-					If ($pos{$i}>0)
-						
-						$start:=$pos{$i}+$len{$i}
-						
-					End if 
-					
-					If ($len{$i}=0)
-						
-						$match:=($i>0)
-						
-						If ($match)
-							
-							$match:=($pos{$i}#$pos{$i-1})
-							
-						End if 
-					End if 
-					
-					If ($match)
-						
-						This:C1470.matches.push({\
-							index: $index; \
-							data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
-							pos: $pos{$i}; \
-							len: $len{$i}; \
-							_subpattern: $sub\
-							})
-						
-						$sub+=1
-						$index+=1
-						
-					Else 
-						
-						break
-						
-					End if 
-				End for 
-			End if 
-			
-		Else 
-			
-			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; "Error while parsing pattern \""+This:C1470._pattern+"\"")
+			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; Last errors:C1799[0].message)
 			
 			return 
 			
 		End if 
+		
+		If ($match)
+			
+			var $sub : Integer:=0
+			
+			For ($i; 0; Size of array:C274($pos); 1)
+				
+				If ($pos{$i}>0)
+					
+					$start:=$pos{$i}+$len{$i}
+					
+				End if 
+				
+				If ($len{$i}=0)
+					
+					$match:=($i>0)
+					
+					If ($match)
+						
+						$match:=($pos{$i}#$pos{$i-1})
+						
+					End if 
+				End if 
+				
+				If ($match)
+					
+					This:C1470.matches.push({\
+						index: $index; \
+						data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
+						pos: $pos{$i}; \
+						len: $len{$i}; \
+						_subpattern: $sub\
+						})
+					
+					$sub+=1
+					$index+=1
+					
+				Else 
+					
+					break
+					
+				End if 
+			End for 
+		End if 
+		
 	Until (Not:C34($match))
 	
 	$replacedText:=This:C1470._target
@@ -441,6 +443,8 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	
 	This:C1470.searchTime:=This:C1470._elapsedTime()
 	
+	This:C1470.success:=True:C214
+	
 	return $replacedText
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -450,25 +454,108 @@ Function lookingAt() : Boolean
 	This:C1470._init()
 	
 	var $match : Boolean:=Try(Match regex:C1019(This:C1470._pattern; This:C1470._target; 1; *))
-	This:C1470.success:=(Last errors:C1799.length=0) && ($match)
+	
+	If (Last errors:C1799.length>0)
+		
+		This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; Last errors:C1799[0].message)
+		
+		return 
+		
+	End if 
+	
+	This:C1470.success:=$match
 	
 	This:C1470.searchTime:=This:C1470._elapsedTime()
 	
 	return This:C1470.success
 	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Returns the number of pattern matches with the target
+Function get count() : Integer
+	
+	return This:C1470.matches.length
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the index of the start of the matched region in the input string.
+Function start($index : Integer) : Integer
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].position
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the index of the first character following the match.
+Function length($index : Integer) : Integer
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].length
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the index of the first character following the match.
+Function end($index : Integer) : Integer
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].position+This:C1470.matches[$index].length+1
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the text that was matched.
+Function group($index : Integer) : Text
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].data
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Escapes a minimal set of characters (\, *, +, ?, |, {, [, (,), ^, $, ., #, and white spaces) 
+by replacing them with their escape codes. 
+	
+This tells the regular expression engine that it must interpret these characters literally, 
+and not as metacharacters.
+*/
+Function escape($in : Text) : Text
+	
+	var $char : Text
+	
+	For each ($char; ["\\"; "*"; "+"; "?"; "|"; "{"; "["; "("; ")"; "^"; "$"; "."; "#"; " "])
+		
+		$in:=$char=Char:C90(Space:K15:42)\
+			 ? Replace string:C233($in; " "; "\\s")\
+			 : Replace string:C233($in; $char; "\\"+$char)
+		
+	End for each 
+	
+	return $in
+	
 	// MARK:-
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function get lastError() : Object
 	
-	If (This:C1470.errors#Null:C1517)\
-		 && (This:C1470.errors.length>0)
+	If (This:C1470.errors.length>0)
 		
 		return This:C1470.errors[This:C1470.errors.length-1]
 		
 	End if 
 	
-	// MARK:-[INTEGRATED USEFUL REGEX]
-	
+	// MARK:-[BUILT-IN SHORTCUTS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Validating an e-mail address
 Function validateMail($target : Text) : Boolean
@@ -627,7 +714,8 @@ Function extractDates($target; $pivotYear : Integer) : Collection
 			If ($indx=5)
 				
 				// Validate
-				$date.valid:=Date:C102($date.string)=Add to date:C393(!00-00-00!; $date.year; $date.month; $date.day)
+				$date.value:=Date:C102(Replace string:C233($date.string; $date.separator; $t))
+				$date.valid:=$date.value=Add to date:C393(!00-00-00!; $date.year; $date.month; $date.day)
 				
 				// Keep
 				$c.push($date)
@@ -669,10 +757,30 @@ It does not verify the top-level domain, of course, so an address like a@b.aol.s
 	
 Note, by the way, that multiple subdomains are not a problem, like a@really.long.stinkin.domain.name.
 */
-Function extractMailsAdresses($target : Text) : Collection
+Function extractMailsAdresses($target; $domains : Collection) : Collection
 	
-	This:C1470._target:=$target || This:C1470._target
-	This:C1470._pattern:="(?mi-s)\\b(?<![%+_$.-])([a-z0-9](?:[a-z0-9]*|(?:[%+_$.-]?[a-z0-9])*))+@([a-z0-9](?:[a-z0-9]|[._-][a-z0-9])*)(\\.[a-z]{2,6})\\b"
+	If (Value type:C1509($target)=Is collection:K8:32)
+		
+		$domains:=$target
+		$target:=Null:C1517
+		
+	End if 
+	
+	If ($target#Null:C1517)
+		
+		This:C1470._target:=String:C10($target)
+		
+	End if 
+	
+	If ($domains#Null:C1517)
+		
+		This:C1470._pattern:="(?mi-s)\\b(?<![%+_$.-])([a-z0-9](?:[a-z0-9]*|(?:[%+_$.-]?[a-z0-9])*))+@([a-z0-9](?:[a-z0-9]|[._-][a-z0-9])*)("+$domains.map(Formula:C1597("\\."+$1.value)).join("|")+")\\b"
+		
+	Else 
+		
+		This:C1470._pattern:="(?mi-s)\\b(?<![%+_$.-])([a-z0-9](?:[a-z0-9]*|(?:[%+_$.-]?[a-z0-9])*))+@([a-z0-9](?:[a-z0-9]|[._-][a-z0-9])*)(\\.[a-z]{2,6})\\b"
+		
+	End if 
 	
 	var $c : Collection:=[]
 	
@@ -747,7 +855,6 @@ Function countWords($target : Text) : Integer
 Function _init() : Integer
 	
 	This:C1470.success:=False:C215
-	This:C1470.errors:=[]
 	This:C1470.matches:=[]
 	This:C1470._startTime:=Milliseconds:C459
 	

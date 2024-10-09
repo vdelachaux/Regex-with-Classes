@@ -1,164 +1,189 @@
 //%attributes = {}
 var $pattern; $target : Text
 var $result : Collection
-var $regex : cs:C1710.regex
+var $rgx : cs:C1710.regex
 
 // Mark:-match()
-$regex:=cs:C1710.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")
+$rgx:=cs:C1710.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")
 
-If ($regex.match())  //Test first occurrence
+// Test first occurrence
+If ($rgx.match())
 	
-	ASSERT:C1129($regex.matches.length=1)
-	ASSERT:C1129($regex.matches[0].data="world")
-	ASSERT:C1129($regex.matches[0].position=7)
-	ASSERT:C1129($regex.matches[0].length=5)
+	ASSERT:C1129($rgx.count=1)
+	ASSERT:C1129($rgx.group()="world")
+	ASSERT:C1129($rgx.start()=7)
+	ASSERT:C1129($rgx.length()=5)
+	ASSERT:C1129($rgx.end()=13)
 	
 End if 
 
-If ($regex.match(10))  // Starts search at 10th character
+// Starts search at 10th character
+If ($rgx.match(10))
 	
-	ASSERT:C1129($regex.matches.length=1)
-	ASSERT:C1129($regex.matches[0].data="world")
-	ASSERT:C1129($regex.matches[0].position=18)
-	ASSERT:C1129($regex.matches[0].length=5)
-	
-End if 
-
-If ($regex.match(True:C214))  // Retrieves all occurrences
-	
-	ASSERT:C1129($regex.matches.length=3)
-	ASSERT:C1129($regex.matches[0].data="world")
-	ASSERT:C1129($regex.matches[0].position=7)
-	ASSERT:C1129($regex.matches[0].length=5)
-	
-	ASSERT:C1129($regex.matches[1].data="world")
-	ASSERT:C1129($regex.matches[1].position=18)
-	ASSERT:C1129($regex.matches[1].length=5)
-	
-	ASSERT:C1129($regex.matches[2].data="world")
-	ASSERT:C1129($regex.matches[2].position=45)
-	ASSERT:C1129($regex.matches[2].length=5)
+	ASSERT:C1129($rgx.count=1)
+	ASSERT:C1129($rgx.group()="world")
+	ASSERT:C1129($rgx.start()=18)
+	ASSERT:C1129($rgx.length()=5)
+	ASSERT:C1129($rgx.end()=24)
 	
 End if 
 
-If ($regex.match(10; True:C214))  // Starts search at 10th character & retrieves all next occurences
+// Retrieves all occurrences
+If ($rgx.match(True:C214))
 	
-	ASSERT:C1129($regex.matches.length=2)
-	ASSERT:C1129($regex.matches[0].data="world")
-	ASSERT:C1129($regex.matches[0].position=18)
-	ASSERT:C1129($regex.matches[0].length=5)
+	ASSERT:C1129($rgx.count=3)
 	
-	ASSERT:C1129($regex.matches[1].data="world")
-	ASSERT:C1129($regex.matches[1].position=45)
-	ASSERT:C1129($regex.matches[1].length=5)
+	ASSERT:C1129($rgx.group()="world")
+	ASSERT:C1129($rgx.start()=7)
+	ASSERT:C1129($rgx.length()=5)
+	ASSERT:C1129($rgx.end()=13)
+	
+	ASSERT:C1129($rgx.group(1)="world")
+	ASSERT:C1129($rgx.start(1)=7)
+	ASSERT:C1129($rgx.length(1)=5)
+	ASSERT:C1129($rgx.end(1)=13)
+	
+	ASSERT:C1129($rgx.group(2)="world")
+	ASSERT:C1129($rgx.start(2)=18)
+	ASSERT:C1129($rgx.length(2)=5)
+	ASSERT:C1129($rgx.end(2)=24)
+	
+	ASSERT:C1129($rgx.group(3)="world")
+	ASSERT:C1129($rgx.start(3)=45)
+	ASSERT:C1129($rgx.length(3)=5)
+	ASSERT:C1129($rgx.end(3)=51)
 	
 End if 
 
-$regex.pattern:="^Hello world$"
-
-If ($regex.match())
+// Starts search at 10th character & retrieves all next occurences
+If ($rgx.match(10; True:C214))
 	
-	ASSERT:C1129($regex.matches.length=1)
-	ASSERT:C1129($regex.matches[0].data="Hello world")
-	ASSERT:C1129($regex.matches[0].position=1)
-	ASSERT:C1129($regex.matches[0].length=11)
+	ASSERT:C1129($rgx.count=2)
+	
+	ASSERT:C1129($rgx.group(1)="world")
+	ASSERT:C1129($rgx.start(1)=18)
+	ASSERT:C1129($rgx.length(1)=5)
+	ASSERT:C1129($rgx.end(1)=24)
+	
+	ASSERT:C1129($rgx.group(2)="world")
+	ASSERT:C1129($rgx.start(2)=45)
+	ASSERT:C1129($rgx.length(2)=5)
+	ASSERT:C1129($rgx.end(2)=51)
 	
 End if 
 
-$regex.target:="fields[10]"
-$regex.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
+$rgx.pattern:="^Hello world$"
 
-If ($regex.match())
+If ($rgx.match())
 	
-	ASSERT:C1129($regex.matches.length=3)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	ASSERT:C1129($rgx.count=1)
+	ASSERT:C1129($rgx.group()="Hello world")
+	ASSERT:C1129($rgx.start()=1)
+	ASSERT:C1129($rgx.length()=11)
+	ASSERT:C1129($rgx.end()=12)
+	
+End if 
+
+$rgx.target:="fields[10]"
+$rgx.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
+
+If ($rgx.match())
+	
+	ASSERT:C1129($rgx.count=3)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2]))
 	
 End if 
 
 // First occurence
-$regex.setTarget("fields[10] fields[11]").setPattern("(?mi-s)(\\w+)\\[(\\d+)]")
+$rgx.setTarget("fields[10] fields[11]").setPattern("(?mi-s)(\\w+)\\[(\\d+)]")
 
-If ($regex.match())
+If ($rgx.match())
 	
-	ASSERT:C1129($regex.matches.length=3)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	ASSERT:C1129($rgx.count=3)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2]))
 	
 End if 
 
-If ($regex.match(1))
+If ($rgx.match(1))
 	
-	ASSERT:C1129($regex.matches.length=3)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
-	
-End if 
-
-If ($regex.match(1; False:C215))
-	
-	ASSERT:C1129($regex.matches.length=3)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	ASSERT:C1129($rgx.count=3)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2]))
 	
 End if 
 
-If ($regex.match(False:C215))
+If ($rgx.match(1; False:C215))
 	
-	ASSERT:C1129($regex.matches.length=3)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	ASSERT:C1129($rgx.count=3)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2]))
+	
+End if 
+
+If ($rgx.match(False:C215))
+	
+	ASSERT:C1129($rgx.count=3)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2]))
 	
 End if 
 
 // All occurences
-If ($regex.match(True:C214))
+If ($rgx.match(True:C214))
 	
-	ASSERT:C1129($regex.matches.length=6)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8; 12; 12; 19)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
+	ASSERT:C1129($rgx.count=6)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8; 12; 12; 19]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2; 10; 6; 2]))
 	
 End if 
 
-If ($regex.match(1; True:C214))
+If ($rgx.match(1; True:C214))
 	
-	ASSERT:C1129($regex.matches.length=6)
-	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11")))
-	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8; 12; 12; 19)))
-	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
+	ASSERT:C1129($rgx.count=6)
+	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11"]))
+	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8; 12; 12; 19]))
+	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2; 10; 6; 2]))
 	
 End if 
 
 // Mark:-Pattern error
-$regex.pattern:="(\\w+\\[(\\d+)]"
-ASSERT:C1129(Not:C34($regex.match()))
-ASSERT:C1129($regex.matches.length=0)
-ASSERT:C1129($regex.lastError.code=304)
-ASSERT:C1129($regex.lastError.method="regex.match")
-ASSERT:C1129($regex.lastError.desc=("Error while parsing pattern \""+$regex.pattern+"\""))
+$rgx.pattern:="(\\w+\\[(\\d+)]"
+ASSERT:C1129(Not:C34($rgx.match()))
+ASSERT:C1129($rgx.matches.length=0)
+ASSERT:C1129($rgx.lastError.code=304)
+ASSERT:C1129($rgx.lastError.method="regex.match")
+ASSERT:C1129($rgx.lastError.desc=("U_REGEX_MISMATCHED_PAREN"))
+
+// Mark:-lookingAt()
+$rgx:=cs:C1710.regex.new("hello world"; "hello")
+ASSERT:C1129($rgx.lookingAt())
+$rgx.pattern:="world"
+ASSERT:C1129(Not:C34($rgx.lookingAt()))
 
 // Mark:-extract()
-$regex:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
-$result:=$regex.extract()
-ASSERT:C1129($result.equal(New collection:C1472("hello world"; "hello"; "world")))
-$result:=$regex.extract("0")
-ASSERT:C1129($result.equal(New collection:C1472("hello world")))
-$result:=$regex.extract(0)
-ASSERT:C1129($result.equal(New collection:C1472("hello world")))
-$result:=$regex.extract(1)
-ASSERT:C1129($result.equal(New collection:C1472("hello")))
-$result:=$regex.extract(2)
-ASSERT:C1129($result.equal(New collection:C1472("world")))
-$result:=$regex.extract("1 2")
-ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
-$result:=$regex.extract(New collection:C1472(1; 2))
-ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
+$rgx:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
+$result:=$rgx.extract()
+ASSERT:C1129($result.equal(["hello world"; "hello"; "world"]))
+$result:=$rgx.extract("0")
+ASSERT:C1129($result.equal(["hello world"]))
+$result:=$rgx.extract(0)
+ASSERT:C1129($result.equal(["hello world"]))
+$result:=$rgx.extract(1)
+ASSERT:C1129($result.equal(["hello"]))
+$result:=$rgx.extract(2)
+ASSERT:C1129($result.equal(["world"]))
+$result:=$rgx.extract("1 2")
+ASSERT:C1129($result.equal(["hello"; "world"]))
+$result:=$rgx.extract([1; 2])
+ASSERT:C1129($result.equal(["hello"; "world"]))
 
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
@@ -167,27 +192,40 @@ $target:="[This pattern will look for a string of numbers separated by commas an
 +"\n1,2"
 $pattern:="(?mi-s)\\x20*,\\x20*(\\d+)\\x20*$"
 
-$regex:=cs:C1710.regex.new($target; $pattern)
-ASSERT:C1129($regex.substitute(" and \\1")=("[This pattern will look for a string of numbers separated by commas and replace "\
+$rgx:=cs:C1710.regex.new($target; $pattern)
+ASSERT:C1129($rgx.substitute(" and \\1")=("[This pattern will look for a string of numbers separated by commas and replace "\
 +"the final comma with \"and\". It will also trim excess spaces around the final "\
 +"comma and after the final number.]\r\r1, 2, 3, 4 and 5\r1, 2 and 3\r1, 2, 3, 4 "\
 +"and 5\n1 and 2"))
 
-ASSERT:C1129($regex.setTarget("hello world").setPattern("[^a-z0-9]").substitute("_")="hello_world")
+ASSERT:C1129($rgx.setTarget("hello world").setPattern("[^a-z0-9]").substitute("_")="hello_world")
 
-$regex.target:="123helloWorld"
-$regex.pattern:="(?mi-s)^[^[:alpha:]]*([^$]*)$"
-ASSERT:C1129($regex.substitute("\\1")="helloWorld")
+$rgx.target:="123helloWorld"
+$rgx.pattern:="(?mi-s)^[^[:alpha:]]*([^$]*)$"
+ASSERT:C1129($rgx.substitute("\\1")="helloWorld")
 
-$regex.target:="Each of these lines ends with some white space. "\
+$rgx.target:="Each of these lines ends with some white space. "\
 +"This one ends with a space. \n\n"\
 +"This one ends with a tab.\t\n\n"\
 +"This one ends with some spaces.    \n\n"\
 +"This one ends with some tabs.\t\t\t\n\n"\
 +"This one ends with a mixture of spaces and tabs.  \t\t  \n\n"\
 +"Since the pattern only matches trailing whitespace, we can replace it with nothing to get the result we want."
-$regex.pattern:="(?mi-s)[[:blank:]]+$"
-ASSERT:C1129(Length:C16($regex.substitute())=327)
+$rgx.pattern:="(?mi-s)[[:blank:]]+$"
+ASSERT:C1129(Length:C16($rgx.substitute())=327)
+
+// Mark:-escape()
+ASSERT:C1129($rgx.escape("fields[10] fields[11]")="fields\\[10]\\sfields\\[11]")
+
+$rgx:=cs:C1710.regex.new("The animal [what kind?] was visible [by whom?] from the window.")
+$rgx.pattern:=$rgx.escape("[")+"(.*?)]"
+If (Asserted:C1132($rgx.match(True:C214)))
+	
+	ASSERT:C1129($rgx.matches.length=4)
+	ASSERT:C1129($rgx.matches[1].data="what kind?")
+	ASSERT:C1129($rgx.matches[3].data="by whom?")
+	
+End if 
 
 // Mark:-countWords()
 /*
@@ -206,12 +244,12 @@ $regex:=cs.regex.new()
 ASSERT($regex.countWords($target)=118; "Expected: 118")
 */
 
-// Mark:-dates()
+// Mark:-extractDates()
 var $c : Collection
 var $o : Object
 
-$regex:=cs:C1710.regex.new("8/8/58")
-$c:=$regex.extractDates()
+$rgx:=cs:C1710.regex.new("8/8/58")
+$c:=$rgx.extractDates()
 ASSERT:C1129($c.length=1)
 $o:=$c[0]
 ASSERT:C1129($o.valid)
@@ -226,8 +264,8 @@ var $tomorrow : Date:=Current date:C33+1
 $target:="This pattern does not rely on a date being on its own line so it will pick them "\
 +"out from sentences like, \"I'm going to the vet on "+String:C10($today)+"\" or \"I have an "\
 +"appointment on "+String:C10($tomorrow)+"\"."
-$regex.setTarget($target)
-$c:=$regex.extractDates()
+$rgx.setTarget($target)
+$c:=$rgx.extractDates()
 ASSERT:C1129($c.length=2)
 
 $o:=$c[0]
@@ -244,30 +282,35 @@ ASSERT:C1129($o.day=Day of:C23($tomorrow))
 ASSERT:C1129($o.month=Month of:C24($tomorrow))
 ASSERT:C1129($o.year=Year of:C25($tomorrow))
 
-
 /*
-By default, 4D uses 30 as pivot year. For example:
+By default, like 4D, the function uses 30 as the pivot year. For example :
     01/25/97 means January 25, 1997.
     01/25/30 means January 25, 1930.
     01/25/29 means January 25, 2029.
     01/25/07 means January 25, 2007.
 */
-$regex.setTarget("8/8/29")
-$c:=$regex.extractDates()
+$rgx.setTarget("8/8/29")
+$c:=$rgx.extractDates()
 ASSERT:C1129($c[0].year=2029)
 
-$regex.setTarget("25/1/97")
-$c:=$regex.extractDates()
+
+$rgx.setTarget("25/1/97")
+$c:=$rgx.extractDates()
 ASSERT:C1129($c[0].year=1997)
-$regex.setTarget("25/1/30")
-$c:=$regex.extractDates()
+$rgx.setTarget("25/1/30")
+$c:=$rgx.extractDates()
 ASSERT:C1129($c[0].year=1930)
-$regex.setTarget("25/1/29")
-$c:=$regex.extractDates()
+$rgx.setTarget("25/1/29")
+$c:=$rgx.extractDates()
 ASSERT:C1129($c[0].year=2029)
-$regex.setTarget("25/1/07")
-$c:=$regex.extractDates()
+$rgx.setTarget("25/1/07")
+$c:=$rgx.extractDates()
 ASSERT:C1129($c[0].year=2007)
+
+$rgx.setTarget("25-1-97")
+$c:=$rgx.extractDates()
+ASSERT:C1129($c[0].year=1997)
+ASSERT:C1129($c[0].valid)
 
 /*
 You can specify the optional pivotYear parameter.
@@ -275,16 +318,22 @@ For example, with the pivot year set at 95:
     01/25/94 means January 25, 2094
     01/25/95 means January 25, 1995
 */
-$regex.setTarget("25/1/94")
-$c:=$regex.extractDates(95)
+$rgx.setTarget("25/1/94")
+$c:=$rgx.extractDates(95)
 ASSERT:C1129($c[0].year=2094)
-$regex.setTarget("25/1/95")
-$c:=$regex.extractDates(95)
+$rgx.setTarget("25/1/95")
+$c:=$rgx.extractDates(95)
 ASSERT:C1129($c[0].year=1995)
 
-// Mark:-emails()
-$regex:=cs:C1710.regex.new("vincent@4d.com")
-$c:=$regex.extractMailsAdresses()
+// Mark:-validateMail()
+ASSERT:C1129(cs:C1710.regex.new("vincent@4d.com").validateMail())
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("hello@world").validateMail()))
+//ASSERT(Not(cs.regex.new("a@b--9.com").validateMail()))
+//ASSERT(Not(cs.regex.new("a@b9-.com").validateMail()))
+
+// Mark:-extractMailsAdresses()
+$rgx:=cs:C1710.regex.new("vincent@4d.com")
+$c:=$rgx.extractMailsAdresses()
 ASSERT:C1129($c.length=1)
 $o:=$c[0]
 ASSERT:C1129($o.address="vincent@4d.com")
@@ -293,9 +342,7 @@ ASSERT:C1129($o.domain="4d")
 ASSERT:C1129($o.topLeveldomain=".com")
 ASSERT:C1129($o.valid)
 
-ASSERT:C1129($regex.setTarget($o.address).validateMail())
-
-$regex.setTarget("This is an imperfect pattern that will pick out likely e-mail addresses using "\
+$target:="This is an imperfect pattern that will pick out likely e-mail addresses using "\
 +"the most common symbols, but will miss unusual addresses. It assumes first "\
 +"that address will start with a letter or number that is not proceeded by one of "\
 +"the other acceptable symbols like \"%+__$.-\", e.g., a@b.com or 9a@b.com. It "\
@@ -314,8 +361,9 @@ $regex.setTarget("This is an imperfect pattern that will pick out likely e-mail 
 +"this: \\.(?:com|net|org|gov|biz|info|jobs|tv|film| ... ) Of course, the "\
 +"danger is that you will miss one since there are so many now. Note, by the "\
 +"way, that multiple subdomains are not a problem, like "\
-+"a@really.long.stinkin.domain.name.")
-$c:=$regex.extractMailsAdresses()
++"a@really.long.stinkin.domain.name."
+$rgx:=cs:C1710.regex.new($target)
+$c:=$rgx.extractMailsAdresses()
 ASSERT:C1129($c.length=10)
 ASSERT:C1129($c[0].address="a@b.com")
 ASSERT:C1129($c[1].address="9a@b.com")
@@ -330,13 +378,16 @@ ASSERT:C1129($c[9].address="a@really.long.stinkin.domain.name")
 
 For each ($o; $c)
 	
-	ASSERT:C1129($regex.validateMail($o.address))
+	ASSERT:C1129($o.valid)
 	
 End for each 
 
+//$c:=$regex.extractMailsAdresses(["com"; "info"])
+
+
 // Mark:-stripTags()
 var $t : Text:="<p>Test paragraph.</p><!-- Comment --> <a href=\"#fragment\">Other text</a>"
-var $rgx : cs:C1710.regex:=cs:C1710.regex.new()
+$rgx:=cs:C1710.regex.new()
 ASSERT:C1129($rgx.stripTags($t)="Test paragraph. Other text")
 
 BEEP:C151
