@@ -1,0 +1,379 @@
+{
+	"_method_": {},
+	"cs.rgx": {
+		"regex": {
+			"new()": {
+				"Syntax": "**.new**( *target* : Variant; *pattern* : Text )",
+				"Params": [
+					[
+						"target",
+						"Variant",
+						"->"
+					],
+					[
+						"pattern",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		}
+	},
+	"regex": {
+		"countWords()": {
+			"Syntax": "**.countWords**( *target* : Text ) : Integer",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"stripTags()": {
+			"Syntax": "**.stripTags**( *target* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setTarget()": {
+			"Syntax": "**.setTarget**( *target* : Variant ) : cs.rgx.regex",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.rgx.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get target()": {
+			"Syntax": "**.get target**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"validateMail()": {
+			"Syntax": "**.validateMail**( *target* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get lastError()": {
+			"Syntax": "**.get lastError**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"escape()": {
+			"Syntax": "**.escape**( *in* : Text ) : Text",
+			"Params": [
+				[
+					"in",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"group()": {
+			"Syntax": "**.group**( *index* : Integer ) : Text",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractDates()": {
+			"Syntax": "**.extractDates**( *target* : Variant; *pivotYear* : Integer ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"pivotYear",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get count()": {
+			"Syntax": "**.get count**() : Integer",
+			"Params": [
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"lookingAt()": {
+			"Syntax": "**.lookingAt**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"start()": {
+			"Syntax": "**.start**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"substitute()": {
+			"Syntax": "**.substitute**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"position",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"match()": {
+			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"start",
+					"Variant",
+					"->"
+				],
+				[
+					"all",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"end()": {
+			"Syntax": "**.end**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extract()": {
+			"Syntax": "**.extract**( *groups* : Variant ) : Collection",
+			"Params": [
+				[
+					"groups",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set pattern()": {
+			"Syntax": "**.set pattern**( *pattern* : Text )",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"setPattern()": {
+			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.rgx.regex",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.rgx.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractMailsAdresses()": {
+			"Syntax": "**.extractMailsAdresses**( *target* : Variant; *domains* : Collection ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"domains",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get pattern()": {
+			"Syntax": "**.get pattern**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"length()": {
+			"Syntax": "**.length**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set target()": {
+			"Syntax": "**.set target**( *target* : Variant )",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"searchTime": {
+			"Syntax": "searchTime : Integer"
+		},
+		"matches": {
+			"Syntax": "matches : Collection"
+		},
+		"success": {
+			"Syntax": "success : Boolean"
+		}
+	}
+}

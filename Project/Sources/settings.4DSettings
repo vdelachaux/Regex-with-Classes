@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="3">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="4">
 	<com.4d>
 		<interface>
 			<shortcuts>
@@ -8,7 +8,7 @@
 			</shortcuts>
 		</interface>
 		<compiler>
-			<options compilation_path="4" target="all"/>
+			<options compilation_path="4" syntax_file="true" target="all"/>
 			<typage default_for_button="2"/>
 			<method_suffix arrays="" interprocess_arrays="" interprocess_variables="" methods="" variables=""/>
 		</compiler>
@@ -17,6 +17,6 @@
 				<options publication_name="Regex-with-Classes" publish_at_startup="false"/>
 			</network>
 		</server>
-		<general execute_host_database_event="true"/>
+		<general component_classStore_name="rgx" execute_host_database_event="true"/>
 	</com.4d>
 </preferences>
