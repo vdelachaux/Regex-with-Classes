@@ -185,11 +185,24 @@ ASSERT:C1129($rgx.lastError.code=304)
 ASSERT:C1129($rgx.lastError.method="regex.match")
 ASSERT:C1129($rgx.lastError.desc=("U_REGEX_MISMATCHED_PAREN"))
 
-// Mark:-lookingAt()
-$rgx:=cs:C1710.regex.new("hello world"; "hello")
-ASSERT:C1129($rgx.lookingAt())
-$rgx.pattern:="world"
-ASSERT:C1129(Not:C34($rgx.lookingAt()))
+// MARK:- .LookingAt()
+$target:="Hello world!"
+$rgx:=cs:C1710.regex.new($target; "Hello")
+ASSERT:C1129($rgx.LookingAt())
+
+$rgx:=cs:C1710.regex.new($target)
+ASSERT:C1129($rgx.LookingAt("Hello"))
+
+$rgx:=cs:C1710.regex.new($target)
+$rgx.caseSensitve:=True:C214
+ASSERT:C1129(Not:C34($rgx.LookingAt("hello")))
+
+// MARK:- .lookingAt()
+$target:="Hello world!"
+$rgx:=cs:C1710.regex.new()
+ASSERT:C1129($rgx.lookingAt($target; "Hello"))
+
+ASSERT:C1129(Not:C34($rgx.lookingAt($target; "(?-i)hello")))
 
 // Mark:-extract()
 $rgx:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
@@ -237,11 +250,11 @@ $rgx.target:="Each of these lines ends with some white space. "\
 $rgx.pattern:="(?mi-s)[[:blank:]]+$"
 ASSERT:C1129(Length:C16($rgx.substitute())=327)
 
-// Mark:-escape()
-ASSERT:C1129($rgx.escape("fields[10] fields[11]")="fields\\[10]\\sfields\\[11]")
+// Mark:-addslashes()
+ASSERT:C1129($rgx.addslashes("fields[10] fields[11]")="fields\\[10]\\sfields\\[11]")
 
 $rgx:=cs:C1710.regex.new("The animal [what kind?] was visible [by whom?] from the window.")
-$rgx.pattern:=$rgx.escape("[")+"(.*?)]"
+$rgx.pattern:=$rgx.addslashes("[")+"(.*?)]"
 If (Asserted:C1132($rgx.match(True:C214)))
 	
 	ASSERT:C1129($rgx.matches.length=4)
@@ -334,7 +347,6 @@ $rgx.setTarget("25-1-97")
 $c:=$rgx.extractDates()
 ASSERT:C1129($c[0].year=1997)
 ASSERT:C1129($c[0].valid)
-
 /*
 You can specify the optional pivotYear parameter.
 For example, with the pivot year set at 95:
@@ -407,10 +419,89 @@ End for each
 
 //$c:=$regex.extractMailsAdresses(["com"; "info"])
 
-
 // Mark:-stripTags()
 var $t : Text:="<p>Test paragraph.</p><!-- Comment --> <a href=\"#fragment\">Other text</a>"
 $rgx:=cs:C1710.regex.new()
 ASSERT:C1129($rgx.stripTags($t)="Test paragraph. Other text")
+
+
+$target:="Hello <b><i>world!</i></b>"
+
+// MARK:- .stripTags()
+$rgx:=cs:C1710.regex.new()
+var $tripped:=$rgx.stripTags($target; "<b>")
+ASSERT:C1129($tripped="Hello <b>world!</b>")
+
+$rgx:=cs:C1710.regex.new()
+$tripped:=$rgx.stripTags($target)
+ASSERT:C1129($tripped="Hello world!")
+
+$rgx:=cs:C1710.regex.new()
+$tripped:=$rgx.stripTags($target; 2)
+ASSERT:C1129($rgx.lastError.code=54)
+ASSERT:C1129($rgx.lastError.desc="The \"allow\" argument  must be Text or a collection.")
+
+// MARK:- .StripTags()
+$rgx:=cs:C1710.regex.new($target)
+$tripped:=$rgx.StripTags("<b>")
+ASSERT:C1129($tripped="Hello <b>world!</b>")
+
+$rgx:=cs:C1710.regex.new($target)
+$tripped:=$rgx.StripTags()
+ASSERT:C1129($tripped="Hello world!")
+
+// MARK:- .trimLeading()
+$target:="    Hello world!"
+$rgx:=cs:C1710.regex.new($target)
+$tripped:=$rgx.trimLeading()
+ASSERT:C1129($tripped="Hello world!")
+
+$tripped:=$rgx.trimLeading("****Hello world!"; "*")
+ASSERT:C1129($tripped="Hello world!")
+
+// MARK:- .TrimLeading()
+$target:="    Hello world!"
+$rgx:=cs:C1710.regex.new($target)
+$tripped:=$rgx.TrimLeading()
+ASSERT:C1129($tripped="Hello world!")
+
+$rgx.target:="****Hello world!"
+$tripped:=$rgx.TrimLeading("*")
+ASSERT:C1129($tripped="Hello world!")
+
+// MARK:- .trimTrailing()
+$rgx.target:="Hello world!    "
+$tripped:=$rgx.trimTrailing()
+ASSERT:C1129($tripped="Hello world!")
+
+$tripped:=$rgx.trimTrailing("Hello world!++++"; "+")
+ASSERT:C1129($tripped="Hello world!")
+
+// MARK:- .TrimTrailing()
+$target:="Hello world!    "
+$rgx:=cs:C1710.regex.new($target)
+$tripped:=$rgx.TrimTrailing()
+ASSERT:C1129($tripped="Hello world!")
+
+$rgx.target:="Hello world!****"
+$tripped:=$rgx.TrimTrailing("*")
+ASSERT:C1129($tripped="Hello world!")
+
+// MARK:- .trim()
+$rgx.target:="    Hello world!    "
+$tripped:=$rgx.trim()
+ASSERT:C1129($tripped="Hello world!")
+
+$tripped:=$rgx.trim("++++Hello world!++++"; "+")
+ASSERT:C1129($tripped="Hello world!")
+
+// MARK:- .Trim()
+$rgx.target:="    Hello world!    "
+$tripped:=$rgx.Trim()
+ASSERT:C1129($tripped="Hello world!")
+
+$rgx.target:="***123***"
+$tripped:=$rgx.Trim("*")
+ASSERT:C1129($tripped="123")
 
 BEEP:C151

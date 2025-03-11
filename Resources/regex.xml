@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<!-- vincent de lachaux  vincent@de-lachaux.net -->
+
+<REGEX>
+	<patterns> 
+		<pattern name="GetMacros" groupsToExtract="2 4 6 8 10 12 13 14">
+			<![CDATA[
+				(?sx)
+				(?: (?= <macro\s [^>]*? name="[^"]*" [^>]*? >))
+				(?: (?= [^>]*? (\sname="([^"]*)") ) )?                           (?#   2 = name - string)
+				(?: (?= [^>]*? (\sin_menu="([^"]*)") ) )?                        (?#   4 = in_menu - true|false)
+				(?: (?= [^>]*? (\stype_ahead="([^"]*)") ) )?                     (?#   6 = type_ahead - true|false)
+				(?: (?= [^>]*? (\stype_ahead_text="([^"]*)") ) )?                (?#   8 = type_ahead_text - string)
+				(?: (?= [^>]*? (\sversion="([^"]*)") ) )?                        (?#  10 = version 1|2)
+				(?: (?= [^>]*? (\smethod_event="([^"]*)") ) )?                   (?#  12 = method_event)
+				(?: (?: [^>]*?) (?:\2 | \4 | \6 | \8 | \10 | \12)* )?
+				(?: (?: [^>]*?) (?:\2 | \4 | \6 | \8 | \10 | \12)* )?
+				(?: (?: [^>]*?) (?:\2 | \4 | \6 | \8 | \10 | \12)* )?
+				(?: (?: [^>]*?) (?:\2 | \4 | \6 | \8 | \10 | \12)* )?
+				(?: (?: [^>]*?) (?:\2 | \4 | \6 | \8 | \10 | \12)* )?
+				(?: (?: [^>]*?) (?:\2 | \4 | \6 | \8 | \10 | \12)* )?
+				(?: [^>]*? > [^<]* )?
+				(?: <text> )?
+				(?: (?= [^<]* <method> (.*?) </method> [\r\s\t\n]*) )?           (?#  13 = MethodName)
+				(?: [\r\s\t\n]*)? (.*?)                                          (?#  14 = MacroText)
+				(?: </*text> [\r\s\t\n]*)?
+				</*macro
+			]]>
+		</pattern>
+	</patterns>
+</REGEX>
