@@ -44,12 +44,12 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 |.**[match](#match)** () : `Boolean`|Returns **True** if the pattern matches the string.
 |.**[extract](#extract)** ({group}) : `Collection`|Returns the list of texts extracted based on the pattern definition
 |.**[substitute](#substitute)** ({replacement: `Text`}) : `Text`|Returns the result of the replacement in the target string
-|.**lookingAt**() : `Boolean`| Returns **True** if the pattern against the target string matches at the start of the string.
+|.**LookingAt**() : `Boolean`| Returns **True** if the pattern against the target string matches at the start of the string.
 |.**start** ({index : `Integer`}) : `Integer`| Returns the position of the start of the nth matched region in the target string.\*
 |.**end** ({index : `Integer`}) : `Integer`| Returns the position of the first character following the text matched by the nth capture group.\*
 |.**length** ({index : `Integer`}) : `Integer`| Returns the length of the nth match.\*
 |.**group** ({index : `Integer`}) : `Text`| Returns the text that was matched by the nth capture group.\*
-|.**[escape](#escape)** (`Text`) : `Text`| Escapes a minimal set of characters.
+|.**[addslashes](#addslashes)** (`Text`) : `Text`| Returns the provided string with backslashes in front of predefined characters.
 
 \* First match if `index` is omitted. Applicable only after calling a `match()`, `extract()` or `substitute()` function.
 
@@ -61,10 +61,36 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 
 |Functions| |
 |:--------|------|  
+|.**[StripTags](#_StripTags)** ({allow}) : `Text`| Removes HTML, XML, and PHP tags from the current string.
+|.**[TrimLeading](#_TrimLeading)** ({char}) : `Text`| Removes all beginning occurrences of a character from the current string.
+|.**[TrimTrailing](#_TrimTrailing)** ({char}) : `Text`| Removes all ending occurrences of a character from the current string.
+|.**[Trim](#_Trim)** ({char}) : `Text`| Removes all beginning and ending occurrences of a character from the current string.
+
+
+
+
+
+
+
+
+### Miscellaneous
+
+|Functions| |
+|:--------|------|  
 |.**[extractDates](#dates)** () : `Collection`| Extracts & validate dates from a string.
 |.**[extractMailsAdresses](#mails)** () : `Collection `| Extracts emails from a text.
 |.**validateMail** (email : `Text`) : `Boolean`| Validate an e-mail address
-|.**stripTags** (in : `Text`) : `Text`|Returns a string with all HTML and PHP tags removed. Equivalent of PHP `strip_tags`
+|.**[stripTags](#stripTags)** ( target {;allow}) : `Text`| Removes HTML, XML, and PHP tags from a string.
+|.**[trimLeading](#trimLeading)** ( target {;char}) : `Text`| Removes all beginning occurrences of a character from a string.
+|.**[trimTrailing](#trimTrailing)** ( target {;char}) : `Text`| Removes all ending occurrences of a character from a string.
+|.**[trim](#trim)** ( target {;char}) : `Text`| Removes all beginning and ending occurrences of a character from a string.
+
+
+
+
+
+
+
 
 ## 🔸 cs.regex.new()
 
@@ -209,9 +235,9 @@ $regex:=cs.regex.new()\
    .substitute("\\1")   // → "helloWorld" 
 ```
 
-## 🔹<a name="escape"> escape ()</a>
+## 🔹<a name="addslashes">addslashes()</a>
 
-> .**escape**( in: `Text` ) : `Text` 
+> .**addslashes**( in: `Text` ) : `Text` 
 
 Escapes a minimal set of characters `\, *, +, ?, |, {, [, (, ), ^, $, ., #, and white spaces` by replacing them with their escape codes. This tells the regular expression engine that it must interpret these characters literally, and not as metacharacters.
 
@@ -240,6 +266,153 @@ $rgx.match(True)
 
 The function escapes the left bracket `[` and the opening brace `{`, but not their corresponding closing characters `]` and `}`. In most cases, it is not necessary to escape them. If a closing bracket or brace is not preceded by its corresponding opening character, the regular expression engine interprets it literally.
 
+
+## 🔹<a name="_StripTags">StripTags ()</a>
+
+> .**StripTags** ({allow : `Text`}) : `Text`    
+> .**StripTags** ({allow : `Collection`}) : `Text`  
+
+Removes HTML, XML and PHP tags from the current string and returns its modified content. Equivalent to PHP function `strip_tags`.
+
+#### Parameters
+- `allow` : `Text | Collection` - Allowed tags. (optional)
+
+If `allow` is ommitted, all tags are removed.
+If `allow` is a text, it could be a tag open description or a comma separated list of tags.
+If `allow` is a collection, it's a collection of tag open descriptions.
+
+##### Example
+```4d
+var $rgx := cs.regex.new("<p>Text with <i><b>HTML</b></i> tags</p>")
+$result:=$rgx.StripTags() // -> "Text with HTML tags"
+$result:=$rgx.StripTags("<b>") // -> "Text with <b>HTML</b> tags"
+$result:=$rgx.StripTags("<i>,<b>,</i>,</b>") // -> "Text with <i><b>HTML</b></i> tags"
+$result:=$rgx.StripTags(["<i>"; "</i>"]) // -> "Text with <i>HTML</i> tags"
+```
+## 🔹<a name="_TrimLeading">TrimLeading ()</a>
+
+> .**TrimLeading** () : `Text`    
+> .**TrimLeading** (char : `Text`) : `Text`  
+
+Deletes all beginning occurrences of a character from the current string and returns its modified content.
+The optional `char` parameter is the character to be deleted. The default value is space.
+
+##### Example
+```4d
+var $rgx := cs.regex.new("    Hello world!")
+$result:=$rgx.TrimLeading() // -> "Hello world!"
+
+var $rgx := cs.regex.new("****123")
+$result:=$rgx.TrimLeading("*") // -> "123"
+```
+
+## 🔹<a name="_TrimTrailing">TrimTrailing ()</a>
+
+> .**TrimTrailing** () : `Text`    
+> .**TrimTrailing** (char : `Text`) : `Text`  
+
+Deletes all ending occurrences of a character from the current string and returns its modified content.
+The optional `char` parameter is the character to be deleted. The default value is space.
+
+##### Example
+```4d
+var $rgx := cs.regex.new("Hello world!    ")
+$result:=$rgx.TrimTrailing() // -> "Hello world!"
+
+var $rgx := cs.regex.new("123****")
+$result:=$rgx.TrimTrailing("*") // -> "123"
+```
+
+## 🔹<a name="_Trim">Trim ()</a>
+
+> .**Trim** () : `Text`    
+> .**Trim** (char : `Text`) : `Text`  
+
+Deletes all beginning & ending occurrences of a character from the current string and returns its modified content.
+The optional `char` parameter is the character to be deleted. The default value is space.
+
+##### Example
+```4d
+var $rgx := cs.regex.new("  Hello world!    ")
+$result:=$rgx.Trim() // -> "Hello world!"
+
+var $rgx := cs.regex.new("****123****")
+$result:=$rgx.Trim("*") // -> "123"
+```
+
+## 🔹<a name="stripTags">stripTags ()</a>
+
+> .**stripTags** ( target : `Text` {;allow : `Text`}) : `Text`    
+> .**StripTags** ( target : `Text` {;allow : `Collection`}) : `Text`  
+
+Removes HTML, XML and PHP tags from a string. Equivalent to PHP function `strip_tags`.
+
+#### Parameters
+- `target` : `Text` - The string to modify
+- `allow` : `Text | Collection` - Allowed tags. (optional)
+
+If `allow` is ommitted, all tags are removed.
+If `allow` is a text, it could be a tag open description or a comma separated list of tags.
+If `allow` is a collection, it's a collection of tag open descriptions.
+
+##### Example
+```4d
+var $rgx := cs.regex.new()
+$result:=$rgx.stripTags("<p>Text with <i><b>HTML</b></i> tags</p>") // -> "Text with HTML tags"
+$result:=$rgx.stripTags("<p>Text with <i><b>HTML</b></i> tags</p>"; "<b>") // -> "Text with <b>HTML</b> tags"
+$result:=$rgx.stripTags("<p>Text with <i><b>HTML</b></i> tags</p>"; "<i>,<b>,</i>,</b>") // -> "Text with <i><b>HTML</b></i> tags"
+$result:=$rgx.stripTags("<p>Text with <i><b>HTML</b></i> tags</p>"; ["<i>"; "</i>"]) // -> "Text with <i>HTML</i> tags"
+```
+## 🔹<a name="trimLeading">trimLeading ()</a>
+
+> .**trimLeading** ( target : `Text` ) : `Text`    
+> .**trimLeading** ( target : `Text` {;char : `Text`}) : `Text`  
+
+Deletes all beginning occurrences of a character from a string.
+The optional `char` parameter is the character to be deleted. The default value is space.
+
+##### Example
+```4d
+var $rgx := cs.regex.new()
+$result:=$rgx.trimLeading("    Hello world!") // -> "Hello world!"
+
+var $rgx := cs.regex.new()
+$result:=$rgx.trimLeading("****123";"*") // -> "123"
+```
+
+## 🔹<a name="trimTrailing">trimTrailing ()</a>
+
+> .**TrimTrailing** ( target : `Text` ) : `Text`    
+> .**TrimTrailing** ( target : `Text` {;char : `Text`}) : `Text`  
+
+Deletes all ending occurrences of a character from a string.
+The optional `char` parameter is the character to be deleted. The default value is space.
+
+##### Example
+```4d
+var $rgx := cs.regex.new()
+$result:=$rgx.trimTrailing("Hello world!    ") // -> "Hello world!"
+
+var $rgx := cs.regex.new()
+$result:=$rgx.trimTrailing("123****";"*") // -> "123"
+```
+
+## 🔹<a name="trim">trim ()</a>
+
+> .**Trim** () : `Text`    
+> .**Trim** (char : `Text`) : `Text`  
+
+Deletes all beginning & ending occurrences of a character from a string.
+The optional `char` parameter is the character to be deleted. The default value is space.
+
+##### Example
+```4d
+var $rgx := cs.regex.new()
+$result:=$rgx.trim("  Hello world!    ") // -> "Hello world!"
+
+var $rgx := cs.regex.new()
+$result:=$rgx.trim("****123****";"*") // -> "123"
+```
 
 ## 🔹<a name="dates">extractDates ()</a>
 

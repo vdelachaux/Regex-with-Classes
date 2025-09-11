@@ -1,26 +1,22 @@
-property success : Boolean  // True = search has found an occurrence; Otherwise, False.
+property success : Boolean:=True:C214  // True = search has found an occurrence; Otherwise, False.
 property matches : Collection  // All matches found: collection of objects {index, string, position, length}.
-property searchTime : Integer
-property errors : Collection
+property searchTime : Integer:=0
+property errors:=[]
 
 property _target : Text:=""
 property _pattern : Text:=""
-property _startTime : Integer
+property _startTime : Integer:=Milliseconds:C459
 property _options : Integer:=0
 
 Class constructor($target; $pattern : Text)
 	
-	This:C1470.errors:=[]
-	
-	This:C1470._init()
-	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.target:=$target
+		This:C1470._setTarget($target)
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470.pattern:=$pattern
+			This:C1470._pattern:=$pattern
 			
 		End if 
 	End if 
@@ -48,7 +44,7 @@ Function setTarget($target) : cs:C1710.regex
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _setTarget($target)
 	
-	This:C1470.success:=True:C214
+	This:C1470._reset(True:C214)
 	
 	Case of 
 			
@@ -81,7 +77,6 @@ Function _setTarget($target)
 			End if 
 			
 			//…………………………………………………………………………………………
-			
 		: (Value type:C1509($target)=Is BLOB:K8:12)
 			
 			This:C1470._target:=Convert to text:C1012($target; "UTF-8")
@@ -98,6 +93,7 @@ Function _setTarget($target)
 	
 	// MARK:-
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// The current regular expression
 Function get pattern() : Text
 	
 	return This:C1470._pattern
@@ -105,17 +101,80 @@ Function get pattern() : Text
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
 Function set pattern($pattern : Text)
 	
-	This:C1470._pattern:=$pattern
+	This:C1470.setPattern($pattern)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Sets the regular expression to use.
 Function setPattern($pattern : Text) : cs:C1710.regex
 	
-	This:C1470._pattern:=$pattern
-	
-	This:C1470.success:=True:C214
+	This:C1470._setPattern($pattern)
 	
 	return This:C1470
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Load a pattern from a file
+Function loadPattern($ID : Text; $file : 4D:C1709.File) : cs:C1710.regex
+	
+	$file:=Count parameters:C259>=2 ? $file : File:C1566("/RESOURCES/regex.xml"; *)
+	
+	If ($file.exists)
+		
+		var $root:=DOM Parse XML source:C719($file.platformPath; False:C215)
+		
+		If (Bool:C1537(OK))
+			
+			var $node:=DOM Find XML element:C864($root; "/REGEX/patterns/pattern[@name=\""+$ID+"\"]")
+			
+			If (Bool:C1537(OK))
+				
+				var $pattern : Text
+				DOM GET XML ELEMENT VALUE:C731($node; $pattern; $pattern)
+				
+				This:C1470.setPattern(cs:C1710.regex.new($pattern; "\\s*\\(\\?#[^)]*\\)|\\s").substitute(""))
+				
+			End if 
+			
+			DOM CLOSE XML:C722($root)
+			
+		End if 
+		
+	Else 
+		
+		// File not found.
+		This:C1470._pushError(Current method name:C684; -43; "File not found.")
+		
+	End if 
+	
+	return This:C1470
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _setPattern($pattern : Text)
+	
+	This:C1470._reset(True:C214)
+	
+	This:C1470._pattern:=$pattern
+	
+	// MARK:-
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function get lastError() : Object
+	
+	If (This:C1470.errors#Null:C1517)\
+		 && (This:C1470.errors.length>0)
+		
+		return This:C1470.errors[This:C1470.errors.length-1]
+		
+	End if 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _pushError($method : Text; $code : Integer; $desc : Text)
+	
+	This:C1470.success:=False:C215
+	
+	This:C1470.errors.push({\
+		code: $code; \
+		method: $method; \
+		desc: $desc\
+		})
 	
 	// MARK:-[OPTIONS]
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
@@ -171,11 +230,11 @@ Function setOptions($options : Integer) : cs:C1710.regex
 Function _setOptions($pattern : Text) : Text
 	
 	var $on : Collection:=[]
-	var $of : Collection:=[]
+	var $off : Collection:=[]
 	
 	If (This:C1470._options ?? 0)
 		
-		$of.push("i")  // (?-i)
+		$off.push("i")  // (?-i)
 		
 	Else 
 		
@@ -185,7 +244,7 @@ Function _setOptions($pattern : Text) : Text
 	
 	If (This:C1470._options ?? 1)
 		
-		$of.push("m")  // (?-m)
+		$off.push("m")  // (?-m)
 		
 	Else 
 		
@@ -210,9 +269,9 @@ Function _setOptions($pattern : Text) : Text
 	$options:="(?"
 	$options+=$on.join("")
 	
-	If ($of.length>0)
+	If ($off.length>0)
 		
-		$options+=" -"+$of.join("")
+		$options+=" -"+$off.join("")
 		
 	End if 
 	
@@ -222,8 +281,10 @@ Function _setOptions($pattern : Text) : Text
 	
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns True if the pattern matches the target.
-	// .match({start: Integer ;}{all : Boolean}) : Boolean
+/*
+Returns True if the pattern matches the target.
+ .match({start: Integer ;}{all : Boolean}) : Boolean
+*/
 Function match($start; $all : Boolean) : Boolean
 	
 	var $i; $index : Integer
@@ -246,11 +307,11 @@ Function match($start; $all : Boolean) : Boolean
 		
 	Else 
 		
-		$start:=1
+		$start:=1  // Start the search with the first character
 		
 	End if 
 	
-	This:C1470._init()
+	This:C1470._reset()
 	
 	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
 	
@@ -312,16 +373,72 @@ Function match($start; $all : Boolean) : Boolean
 	
 	return This:C1470.success
 	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Returns the number of pattern matches with the target
+Function get count() : Integer
+	
+	return This:C1470.matches.length
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of extracted substrings
-	// .extract({groups: Integer}) : Collection
-	// .extract({groups: Text}) : Collection
-	// .extract({groups: Collection}) : Collection
+	// Return the position of the matched region in the input string.
+Function start($index : Integer) : Integer
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].position
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the length of the match.
+Function length($index : Integer) : Integer
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].length
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the position of the first character following the match.
+Function end($index : Integer) : Integer
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].position+This:C1470.matches[$index].length+1
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the text that was matched.
+Function group($index : Integer) : Text
+	
+	$index:=$index#0 ? $index-1 : 0
+	
+	If (This:C1470.matches.length>=$index)
+		
+		return This:C1470.matches[$index].data
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Returns a collection of extracted substrings
+ .extract({groups: Integer}) : Collection
+ .extract({groups: Text}) : Collection
+ .extract({groups: Collection}) : Collection
+*/
 Function extract($groups) : Collection
 	
 	var $i; $index; $indx : Integer
 	
-	This:C1470._init()
+	This:C1470._reset()
 	
 	Case of 
 			
@@ -369,11 +486,11 @@ Function extract($groups) : Collection
 	ARRAY LONGINT:C221($pos; 0)
 	
 	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
-	var $start : Integer:=1
+	var $start : Integer:=1  // Start the search with the first character
 	
 	Repeat 
 		
-		var $match : Boolean:=Try(Match regex:C1019($pattern; This:C1470._target; $start; $pos; $len; *))
+		var $match : Boolean:=Try(Match regex:C1019($pattern; This:C1470._target; $start; $pos; $len))
 		
 		If (Last errors:C1799.length>0)
 			
@@ -447,7 +564,7 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	
 	var $backup : Text:=$replacement
 	
-	This:C1470._init()
+	This:C1470._reset()
 	
 	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
 	var $start : Integer:=1
@@ -562,12 +679,18 @@ Function replace($replacement : Text; $count : Integer; $position : Integer) : T
 	return This:C1470.substitute($replacement; $count; $position)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns True if the pattern matches at the start of the string
-Function lookingAt() : Boolean
+	// Returns True if the pattern matches at the start of the given string
+Function lookingAt($target : Text; $pattern : Text) : Boolean
 	
-	This:C1470._init()
+	return cs:C1710.regex.new($target || This:C1470.target).LookingAt($pattern)
 	
-	var $match : Boolean:=Try(Match regex:C1019(This:C1470._setOptions(This:C1470._pattern); This:C1470._target; 1; *))
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if the pattern matches at the start of the current string
+Function LookingAt($pattern : Text) : Boolean
+	
+	This:C1470._reset()
+	
+	var $match : Boolean:=Try(Match regex:C1019(This:C1470._setOptions($pattern || This:C1470._pattern); This:C1470._target; 1; *))
 	
 	If (Last errors:C1799.length>0)
 		
@@ -588,69 +711,22 @@ Function split() : Collection
 	
 	// TODO:split with regex ?
 	
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-	// Returns the number of pattern matches with the target
-Function get count() : Integer
-	
-	return This:C1470.matches.length
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Return the index of the start of the matched region in the input string.
-Function start($index : Integer) : Integer
-	
-	$index:=$index#0 ? $index-1 : 0
-	
-	If (This:C1470.matches.length>=$index)
-		
-		return This:C1470.matches[$index].position
-		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Return the index of the first character following the match.
-Function length($index : Integer) : Integer
-	
-	$index:=$index#0 ? $index-1 : 0
-	
-	If (This:C1470.matches.length>=$index)
-		
-		return This:C1470.matches[$index].length
-		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Return the index of the first character following the match.
-Function end($index : Integer) : Integer
-	
-	$index:=$index#0 ? $index-1 : 0
-	
-	If (This:C1470.matches.length>=$index)
-		
-		return This:C1470.matches[$index].position+This:C1470.matches[$index].length+1
-		
-	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Return the text that was matched.
-Function group($index : Integer) : Text
-	
-	$index:=$index#0 ? $index-1 : 0
-	
-	If (This:C1470.matches.length>=$index)
-		
-		return This:C1470.matches[$index].data
-		
-	End if 
+	return []
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 /*
-Escapes a minimal set of characters (\, *, +, ?, |, {, [, (,), ^, $, ., #, and white spaces) 
-by replacing them with their escape codes. 
-	
+Returns a string with backslashes in front of predefined characters:
+\, *, +, ?, |, {, [, (,), ^, $, ., #, and white spaces
 This tells the regular expression engine that it must interpret these characters literally, 
 and not as metacharacters.
 */
-Function escape($in : Text) : Text
+Function addslashes($in : Text) : Text
+	
+	If (Length:C16($in)=0)
+		
+		return ""
+		
+	End if 
 	
 	var $char : Text
 	
@@ -664,38 +740,84 @@ Function escape($in : Text) : Text
 	
 	return $in
 	
-	// MARK:-
-	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
-Function get lastError() : Object
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Alias of addslashes
+Function escape($in : Text) : Text
 	
-	If (This:C1470.errors.length>0)
-		
-		return This:C1470.errors[This:C1470.errors.length-1]
-		
-	End if 
+	return This:C1470.addslashes($in)
 	
 	// MARK:-[BUILT-IN SHORTCUTS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Validating an e-mail address
+	// Validate an email address
 Function validateMail($target : Text) : Boolean
 	
-	This:C1470._target:=$target || This:C1470._target
-	This:C1470._pattern:="^([-a-zA-Z0-9_]+(?:\\.[-a-zA-Z0-9_]+)*)(?:@)([-a-zA-Z0-9\\._]+(?:\\.[a-zA-Z0-9]{2,}"+")+)$"
+	This:C1470.target:=$target || This:C1470.target
+	This:C1470.pattern:="^([-a-zA-Z0-9_]+(?:\\.[-a-zA-Z0-9_]+)*)(?:@)([-a-zA-Z0-9\\._]+(?:\\.[a-zA-Z0-9]{2,}"+")+)$"
 	
 	return This:C1470.match()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function stripTags($target : Text) : Text
+	// Removes HTML, XML and PHP tags from the current string
+Function StripTags($allow) : Text
+	
+	This:C1470._target:=This:C1470.stripTags(This:C1470._target; $allow)
+	
+	return This:C1470._target
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Removes HTML, XML and PHP tags from a string
+Function stripTags($target : Text; $allow) : Text
 	
 	$target:=$target || This:C1470._target
 	$target:=Replace string:C233($target; "</p><p>"; " ")
 	
 	var $len; $pos : Integer
+	var $start : Integer:=1
 	
-	While (Match regex:C1019("(?mi-s)<[^>]*>"; $target; 1; $pos; $len))
+	Case of 
+			
+			//______________________________________________________
+		: ($allow=Null:C1517)
+			
+			var $allowed:=[]
+			
+			//______________________________________________________
+		: (Value type:C1509($allow)=Is collection:K8:32)
+			
+			$allowed:=$allow
+			
+			//______________________________________________________
+		: (Value type:C1509($allow)=Is text:K8:3)
+			
+			$allowed:=Split string:C1554($allow; ",")
+			
+			If ($allowed.length=1)\
+				 && Match regex:C1019("(?m-si)^<([^/>]*)>$"; $allow; 1; $pos; $len; *)
+				
+				$allowed.push("</"+Substring:C12($allow; $pos+1; $len-2)+">")
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError(Current method name:C684; 54; "The \"allow\" argument  must be Text or a collection.")
+			return 
+			
+			//______________________________________________________
+	End case 
+	
+	While (Match regex:C1019("(?mi-s)<[^>]*>"; $target; $start; $pos; $len))
 		
-		$target:=Delete string:C232($target; $pos; $len)
-		
+		If ($allowed.includes(Substring:C12($target; $pos; $len)))
+			
+			$start:=$pos+$len
+			
+		Else 
+			
+			$target:=Delete string:C232($target; $pos; $len)
+			
+		End if 
 	End while 
 	
 	$target:=Replace string:C233($target; "\r\n"; "\n")
@@ -765,7 +887,7 @@ Function extractDates($target; $pivotYear : Integer) : Collection
 	
 	var $century : Integer:=Num:C11(Delete string:C232(String:C10(Year of:C25(Current date:C33)); 3; 2))*100
 	
-	var $c : Collection:=[]
+	var $c:=[]
 	
 	If (This:C1470.match(1; True:C214))
 		
@@ -901,7 +1023,7 @@ Function extractMailsAdresses($target; $domains : Collection) : Collection
 		
 	End if 
 	
-	var $c : Collection:=[]
+	var $c:=[]
 	
 	If (This:C1470.match(1; True:C214))
 		
@@ -961,6 +1083,77 @@ Function extractMailsAdresses($target; $domains : Collection) : Collection
 	return $c
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Returns the given string in which all start occurrences of a specified character have been removed.
+If the character is omitted, the space is used.
+*/
+Function trimLeading($target : Text; $char : Text) : Text
+	
+	return cs:C1710.regex.new($target || This:C1470.target).TrimLeading($char)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Removes all beginning occurrences of a specified character from the current string.
+If the character is omitted, the space is used.
+*/
+Function TrimLeading($char : Text) : Text
+	
+	$char:=This:C1470.addslashes($char) || "\\s"
+	
+	This:C1470._pattern:="^"+$char+"*"
+	This:C1470._target:=This:C1470.substitute()
+	
+	return This:C1470._target
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Returns the given string in which all ending occurrences of a specified character have been removed.
+If the character is omitted, the space is used.
+*/
+Function trimTrailing($target : Text; $char : Text) : Text
+	
+	return cs:C1710.regex.new($target || This:C1470.target).TrimTrailing($char)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/* 
+Removes all ending occurrences of a specified character from the current string.
+If the character is omitted, the space is used.
+*/
+Function TrimTrailing($char : Text) : Text
+	
+	$char:=This:C1470.addslashes($char) || "\\s"
+	
+	This:C1470._pattern:=$char+"*$"
+	This:C1470._target:=This:C1470.substitute()
+	
+	return This:C1470._target
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Returns the given string in which all start and end occurrences of a specified character have been removed.
+If the character is omitted, the space is used.
+*/
+Function trim($target : Text; $char : Text) : Text
+	
+	return cs:C1710.regex.new($target || This:C1470.target).Trim($char)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Removes all beginning and ending occurrences of a specified character from the current string.
+If the character is omitted, the space is used.
+*/
+Function Trim($char : Text) : Text
+	
+	$char:=This:C1470.addslashes($char) || "\\s"
+	
+	This:C1470._pattern:="^"+$char+"*"
+	This:C1470._target:=This:C1470.substitute()
+	This:C1470._pattern:=$char+"*$"
+	This:C1470._target:=This:C1470.substitute()
+	
+	return This:C1470._target
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// 🚧 Returns the number of words in a string
 Function countWords($target : Text) : Integer
 	
@@ -971,24 +1164,14 @@ Function countWords($target : Text) : Integer
 	
 	// MARK:-
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _init() : Integer
+Function _reset($success : Boolean)
 	
-	This:C1470.success:=False:C215
+	This:C1470.success:=$success
 	This:C1470.matches:=[]
 	This:C1470._startTime:=Milliseconds:C459
-	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _pushError($method : Text; $code : Integer; $desc : Text)
-	
-	This:C1470.success:=False:C215
-	
-	This:C1470.errors.push({\
-		code: $code; \
-		method: $method; \
-		desc: $desc\
-		})
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _elapsedTime() : Integer
 	
 	return Milliseconds:C459-This:C1470._startTime
+	
