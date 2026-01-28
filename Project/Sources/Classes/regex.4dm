@@ -1083,6 +1083,15 @@ Function extractMailsAdresses($target; $domains : Collection) : Collection
 	return $c
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Strict validation of an URL (structure + characters)
+Function validateURL($target : Text) : Boolean
+	
+	This:C1470.target:=$target || This:C1470.target
+	This:C1470.pattern:="^https?://(?:localhost|(?:\\d{1,3}\\.){3}\\d{1,3}|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::[0-9]+)?(?:/[A-Za-z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?$"
+	
+	return This:C1470.match()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 /*
 Returns the given string in which all start occurrences of a specified character have been removed.
 If the character is omitted, the space is used.
