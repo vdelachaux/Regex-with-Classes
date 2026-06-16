@@ -1,102 +1,107 @@
-<!-- MARKDOWN LINKS & IMAGES -->
-[release-shield]: https://img.shields.io/github/v/release/vdelachaux/Regex-with-classes?include_prereleases
-[release-url]: https://github.com/vdelachaux/Regex-with-classes/releases/latest
-[license-shield]: https://img.shields.io/github/license/vdelachaux/Regex-with-classes
-[build-shield]: https://github.com/vdelachaux/Regex-with-classes/actions/workflows/build.yml/badge.svg
-[build-url]: https://github.com/vdelachaux/Regex-with-classes/actions/workflows/build.yml
-
-<!--BADGES-->
-![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components)  ![Static Badge](https://img.shields.io/badge/rgx-blue)
-<br>
-[![release][release-shield]][release-url]
-[![license][license-shield]](LICENSE)
-<img src="https://img.shields.io/github/downloads/vdelachaux/Regex-with-classes/total"/>
-
 # Regex-with-Classes
 
-The goal of this class is to reduce the complexity of code to use [Regex](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://en.wikipedia.org/wiki/Regular_expression&ved=2ahUKEwj49OCo2oOJAxWmaqQEHdRhIZoQFnoECAkQAQ&usg=AOvVaw1UpX3CvTAA_-Exd80mQacg) in 4D.
+[![release](https://img.shields.io/github/v/release/vdelachaux/Regex-with-classes?include_prereleases)](https://github.com/vdelachaux/Regex-with-classes/releases/latest)
+[![license](https://img.shields.io/github/license/vdelachaux/Regex-with-classes)](LICENSE)
 
-## Code sample
+`Regex-with-Classes` simplifies regular expression usage in 4D with a class-based API.
+
+## What you get
+
+- fluent setup: `setTarget()`, `setPattern()`, `setOptions()`
+- core regex operations: `match()`, `extract()`, `substitute()`
+- helper methods: `stripTags`, trim helpers, mail/date extraction, URL validation
+- error tracking: `success`, `lastError`, `errors`
+
+## Quick start
 
 ```4d
 var $regex : cs.regex
 $regex:=cs.regex.new("Hello world, the world is wonderful but the world is in danger"; "Hello (world)")
 
 var $match : Boolean
-$match:=$regex.match()  // = True
+$match:=$regex.match()  // True
 
 var $c : Collection
-$c:=$regex.extract()  // = [ "Hello world", "world" ]
-$c:=$regex.extract(1)  // = [ "world"]
+$c:=$regex.extract()   // ["Hello world"; "world"]
+$c:=$regex.extract(1)  // ["world"]
 
 var $result : Text
-$result:=$regex.substitute("Vincent")  // = "Vincent, the world is wonderful but the world is in danger"
+$result:=$regex.substitute("Vincent")
+// "Vincent, the world is wonderful but the world is in danger"
 ```
 
-## Documentation
+## Compatibility
 
-The complete class documentation is available [here](Documentation/Classes/regex.md) and is also displayed in the Explorer documentation panel.     
+- component usage through 4D Project Dependencies
+- regex engine behavior follows ICU/4D `Match regex`
+- `caseSensitve` is kept for compatibility, and `caseSensitive` is available as an alias
 
+## Installation
 
-The [***test_regex***](Project/Sources/Methods/test_regex.4dm) method will help you learn how to use it.
+### Preferred: Project Dependencies (`rgx` namespace)
 
-# Installation
+Add `vdelachaux/regex-with-classes` in `Design > Project dependencies`.
 
-## ![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components) ![Static Badge](https://img.shields.io/badge/rgx-blue)
-
-This repository is compatible with the [Project dependencies](https://developer.4d.com/docs/Project/components#monitoring-project-dependencies) feature. So you can simply integrate this component into your project by selecting `Design` > `Project dependencies` and adding `vdelachaux/regex-with-classes` as the repository address in the dedicated dialog box. **This way, you can benefit from updates over time**.
-
-The published namespace is "**rgx**", so the class instantiation in your project will therefore be:
+Then instantiate with:
 
 ```4d
 $regex:=cs.rgx.regex.new()
 ```
 
-## Copy of the class
+### Alternative: copy class files (`cs` namespace)
 
-Copy into your database folder:
+Copy:
 
-* The `regex.4dm` file from this repository to the `~/Project/Sources/Classes/` folder
-* The `regex.md` file from this repository to the `~/Documentation/Classes/` folder
+- `Project/Sources/Classes/regex.4dm` to your `~/Project/Sources/Classes/`
+- `Documentation/Classes/regex.md` to your `~/Documentation/Classes/`
 
-The class instantiation will therefore be:
+Then instantiate with:
 
 ```4d
 $regex:=cs.regex.new()
 ```
-⚠️ In this case, you'll need to check the repository regularly for updates, subscribe to it to receive update notifications, or clone it. You'll then need to transfer the changes to your project.
 
-# Contributing
-This class will be augmented according to _my needs_ but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/Regex-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com)
+## Documentation and tests
 
+- Full class documentation: [Documentation/Classes/regex.md](Documentation/Classes/regex.md)
+- Usage examples/tests: [Project/Sources/Methods/test_regex.4dm](Project/Sources/Methods/test_regex.4dm)
 
-> 📌 This code is an evolution of the [regex](https://github.com/vdelachaux/regex.4dbase) component.
-
-# References
-
-## 4D documentation
-* [Match regex](https://doc.4d.com/4Dv20/4D/20.5/Match-regex.301-7388377.en.html)
-* [Declaring components stored on GitHub](https://developer.4d.com/docs/Project/components#declaring-components-stored-on-github)
-* [Monitoring Project Dependencies](https://developer.4d.com/docs/Project/components#monitoring-project-dependencies)
-
-## Regex documentation
-
-* [ICU Regular Expressions](https://unicode-org.github.io/icu/userguide/strings/regexp.html)
-* [Mastering Regular Expressions](https://www.oreilly.com/library/view/mastering-regular-expressions/0596528124/)
-* [Wikipedia](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://en.wikipedia.org/wiki/Regular_expression&ved=2ahUKEwj49OCo2oOJAxWmaqQEHdRhIZoQFnoECAkQAQ&usg=AOvVaw1UpX3CvTAA_-Exd80mQacg)
-
-## Tools
-
-* [RegexLab](https://github.com/AJARProject/AJ_Tools_Regex) component
-* macOS [RegExRX](https://apps.apple.com/fr/app/regexrx/id498370702?l=en-GB&mt=12). An application I use regularly to test my Regex. It allows you to copy them, once finalized in a format compatible with 4D's code editor, and even to copy the FR or US code like this:
+## Error handling example
 
 ```4d
-ARRAY LONGINT($rxPositions;0)
-ARRAY LONGINT($rxLengths;0)
-$rxPattern:="(?mi-s)world"
-$rxMatch:=Match regex($rxPattern;$sourceText;1;$rxPositions;$rxLengths)
+var $rgx : cs.regex
+$rgx:=cs.regex.new("abc"; "(unclosed")
+
+If (Not($rgx.match()))
+  // inspect details from 4D/ICU
+  ALERT("Regex error: "+$rgx.lastError.desc)
+End if
 ```
 
-#  
+## Contributing
 
-`Enjoy the 4th dimension`
+Pull requests are welcome:
+
+- [Open PRs](https://github.com/vdelachaux/Regex-with-Classes/pulls)
+- [4D community](https://discuss.4d.com)
+
+This project is an evolution of [regex.4dbase](https://github.com/vdelachaux/regex.4dbase).
+
+## References
+
+### 4D
+
+- [Match regex](https://doc.4d.com/4Dv20/4D/20.5/Match-regex.301-7388377.en.html)
+- [Declaring components stored on GitHub](https://developer.4d.com/docs/Project/components#declaring-components-stored-on-github)
+- [Monitoring Project Dependencies](https://developer.4d.com/docs/Project/components#monitoring-project-dependencies)
+
+### Regex
+
+- [ICU Regular Expressions](https://unicode-org.github.io/icu/userguide/strings/regexp.html)
+- [Mastering Regular Expressions](https://www.oreilly.com/library/view/mastering-regular-expressions/0596528124/)
+- [Wikipedia: Regular expression](https://en.wikipedia.org/wiki/Regular_expression)
+
+### Tools
+
+- [RegexLab](https://github.com/AJARProject/AJ_Tools_Regex)
+- macOS [RegExRX](https://apps.apple.com/fr/app/regexrx/id498370702?l=en-GB&mt=12)

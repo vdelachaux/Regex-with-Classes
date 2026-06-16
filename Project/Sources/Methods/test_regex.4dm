@@ -20,10 +20,15 @@ ASSERT:C1129(Not:C34($rgx.match()))
 $rgx.allowSpaceAndComments:=True:C214
 ASSERT:C1129(Not:C34($rgx.match()))
 
+// Alias retrocompatible with corrected spelling
+$rgx.caseSensitive:=True:C214
+ASSERT:C1129(Not:C34($rgx.match()))
+
 $rgx.caseSensitve:=False:C215
 $rgx.dotMatchNewLine:=False:C215
 $rgx.treatTargetAsOneLine:=False:C215
 $rgx.allowSpaceAndComments:=False:C215
+$rgx.caseSensitive:=False:C215
 ASSERT:C1129($rgx.match())
 
 // Mark:-match()
@@ -114,6 +119,8 @@ If ($rgx.match())
 	
 	ASSERT:C1129($rgx.count=3)
 	ASSERT:C1129($rgx.matches.extract("data").equal(["fields[10]"; "fields"; "10"]))
+	ASSERT:C1129($rgx.matches.extract("pos").equal([1; 1; 8]))
+	ASSERT:C1129($rgx.matches.extract("len").equal([10; 6; 2]))
 	ASSERT:C1129($rgx.matches.extract("position").equal([1; 1; 8]))
 	ASSERT:C1129($rgx.matches.extract("length").equal([10; 6; 2]))
 	
@@ -220,6 +227,10 @@ $result:=$rgx.extract("1 2")
 ASSERT:C1129($result.equal(["hello"; "world"]))
 $result:=$rgx.extract([1; 2])
 ASSERT:C1129($result.equal(["hello"; "world"]))
+ASSERT:C1129($rgx.matches.extract("pos").equal([1; 7]))
+ASSERT:C1129($rgx.matches.extract("len").equal([5; 5]))
+ASSERT:C1129($rgx.matches.extract("position").equal([1; 7]))
+ASSERT:C1129($rgx.matches.extract("length").equal([5; 5]))
 
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
@@ -249,6 +260,12 @@ $rgx.target:="Each of these lines ends with some white space. "\
 +"Since the pattern only matches trailing whitespace, we can replace it with nothing to get the result we want."
 $rgx.pattern:="(?mi-s)[[:blank:]]+$"
 ASSERT:C1129(Length:C16($rgx.substitute())=327)
+
+$rgx:=cs:C1710.regex.new("a1 b2 c3"; "(?mi-s)[a-z](\\d)")
+ASSERT:C1129($rgx.substitute("X\\1"; 2)="X1 X2 c3")
+ASSERT:C1129($rgx.substitute("X\\1"; 1; 4)="a1 X2 c3")
+ASSERT:C1129($rgx.matches.extract("position").equal([4; 5]))
+ASSERT:C1129($rgx.matches.extract("length").equal([2; 1]))
 
 // Mark:-addslashes()
 ASSERT:C1129($rgx.addslashes("fields[10] fields[11]")="fields\\[10]\\sfields\\[11]")

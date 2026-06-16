@@ -187,6 +187,17 @@ Function get caseSensitve() : Boolean
 Function set caseSensitve($on : Boolean)
 	
 	This:C1470._options:=$on ? This:C1470._options ?+ 0 : This:C1470._options ?- 0
+
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
+	// Backward-compatible alias with corrected spelling.
+Function get caseSensitive() : Boolean
+
+	return This:C1470.caseSensitve
+
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+Function set caseSensitive($on : Boolean)
+
+	This:C1470.caseSensitve:=$on
 	
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
 Function get treatTargetAsOneLine() : Boolean
@@ -336,6 +347,8 @@ Function match($start; $all : Boolean) : Boolean
 				This:C1470.matches.push({\
 					index: $index; \
 					data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
+					pos: $pos{$i}; \
+					len: $len{$i}; \
 					position: $pos{$i}; \
 					length: $len{$i}\
 					})
@@ -383,11 +396,11 @@ Function get count() : Integer
 	// Return the position of the matched region in the input string.
 Function start($index : Integer) : Integer
 	
-	$index:=$index#0 ? $index-1 : 0
+	$index:=($index>0) ? $index-1 : 0
 	
-	If (This:C1470.matches.length>=$index)
+	If (This:C1470.matches.length>$index)
 		
-		return This:C1470.matches[$index].position
+		return This:C1470.matches[$index].position || This:C1470.matches[$index].pos
 		
 	End if 
 	
@@ -395,11 +408,11 @@ Function start($index : Integer) : Integer
 	// Return the length of the match.
 Function length($index : Integer) : Integer
 	
-	$index:=$index#0 ? $index-1 : 0
+	$index:=($index>0) ? $index-1 : 0
 	
-	If (This:C1470.matches.length>=$index)
+	If (This:C1470.matches.length>$index)
 		
-		return This:C1470.matches[$index].length
+		return This:C1470.matches[$index].length || This:C1470.matches[$index].len
 		
 	End if 
 	
@@ -407,11 +420,11 @@ Function length($index : Integer) : Integer
 	// Return the position of the first character following the match.
 Function end($index : Integer) : Integer
 	
-	$index:=$index#0 ? $index-1 : 0
+	$index:=($index>0) ? $index-1 : 0
 	
-	If (This:C1470.matches.length>=$index)
+	If (This:C1470.matches.length>$index)
 		
-		return This:C1470.matches[$index].position+This:C1470.matches[$index].length+1
+		return (This:C1470.start($index+1)+This:C1470.length($index+1)+1)
 		
 	End if 
 	
@@ -419,9 +432,9 @@ Function end($index : Integer) : Integer
 	// Return the text that was matched.
 Function group($index : Integer) : Text
 	
-	$index:=$index#0 ? $index-1 : 0
+	$index:=($index>0) ? $index-1 : 0
 	
-	If (This:C1470.matches.length>=$index)
+	If (This:C1470.matches.length>$index)
 		
 		return This:C1470.matches[$index].data
 		
@@ -521,7 +534,9 @@ Function extract($groups) : Collection
 								index: $indx; \
 								data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
 								pos: $pos{$i}; \
-								len: $len{$i}\
+								len: $len{$i}; \
+								position: $pos{$i}; \
+								length: $len{$i}\
 								})
 							
 							$indx+=1
@@ -560,14 +575,18 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	ARRAY LONGINT:C221($len; 0)
 	ARRAY LONGINT:C221($pos; 0)
 	
-	// TODO:Manage count and position
-	
 	var $backup : Text:=$replacement
 	
 	This:C1470._reset()
 	
 	var $pattern : Text:=This:C1470._setOptions(This:C1470._pattern)
-	var $start : Integer:=1
+	var $start : Integer:=Num:C11($position)
+	$start:=$start>0 ? $start : 1
+	
+	var $replaceCount : Integer:=Num:C11($count)
+	$replaceCount:=$replaceCount>0 ? $replaceCount : 0
+	
+	var $replacedMainCount : Integer:=0
 	
 	Repeat 
 		
@@ -582,6 +601,20 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 		End if 
 		
 		If ($match)
+			
+			var $includeCurrent : Boolean:=True:C214
+			
+			If ($replaceCount>0)
+				
+				$includeCurrent:=($replacedMainCount<$replaceCount)
+				
+			End if 
+			
+			If (Not:C34($includeCurrent))
+				
+				break
+				
+			End if 
 			
 			var $sub : Integer:=0
 			
@@ -611,6 +644,8 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 						data: Substring:C12(This:C1470._target; $pos{$i}; $len{$i}); \
 						pos: $pos{$i}; \
 						len: $len{$i}; \
+						position: $pos{$i}; \
+						length: $len{$i}; \
 						_subpattern: $sub\
 						})
 					
@@ -623,6 +658,8 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 					
 				End if 
 			End for 
+			
+			$replacedMainCount+=1
 		End if 
 		
 	Until (Not:C34($match))

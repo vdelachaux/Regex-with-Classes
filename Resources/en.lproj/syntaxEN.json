@@ -37,60 +37,23 @@
 			],
 			"Summary": ""
 		},
-		"split()": {
-			"Syntax": "**.split**() : Collection",
-			"Params": [
-				[
-					"",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"Trim()": {
-			"Syntax": "**.Trim**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"trim()": {
-			"Syntax": "**.trim**( *target* : Text; *char* : Text ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"set pattern()": {
 			"Syntax": "**.set pattern**( *pattern* : Text )",
 			"Params": [
 				[
 					"pattern",
 					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set caseSensitive()": {
+			"Syntax": "**.set caseSensitive**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
 					"->"
 				]
 			],
@@ -261,43 +224,6 @@
 			],
 			"Summary": ""
 		},
-		"start()": {
-			"Syntax": "**.start**( *index* : Integer ) : Integer",
-			"Params": [
-				[
-					"index",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"stripTags()": {
-			"Syntax": "**.stripTags**( *target* : Text; *allow* : Variant ) : Text",
-			"Params": [
-				[
-					"target",
-					"Text",
-					"->"
-				],
-				[
-					"allow",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"addslashes()": {
 			"Syntax": "**.addslashes**( *in* : Text ) : Text",
 			"Params": [
@@ -309,6 +235,54 @@
 				[
 					"",
 					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"Trim()": {
+			"Syntax": "**.Trim**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"trim()": {
+			"Syntax": "**.trim**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"split()": {
+			"Syntax": "**.split**() : Collection",
+			"Params": [
+				[
+					"",
+					"Collection",
 					"<-"
 				]
 			],
@@ -409,12 +383,70 @@
 			],
 			"Summary": ""
 		},
+		"stripTags()": {
+			"Syntax": "**.stripTags**( *target* : Text; *allow* : Variant ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"allow",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"start()": {
+			"Syntax": "**.start**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"get count()": {
 			"Syntax": "**.get count**() : Integer",
 			"Params": [
 				[
 					"",
 					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"match()": {
+			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"start",
+					"Variant",
+					"->"
+				],
+				[
+					"all",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
 					"<-"
 				]
 			],
@@ -620,6 +652,17 @@
 			],
 			"Summary": ""
 		},
+		"get caseSensitive()": {
+			"Syntax": "**.get caseSensitive**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"setTarget()": {
 			"Syntax": "**.setTarget**( *target* : Variant ) : cs.rgx.regex",
 			"Params": [
@@ -678,27 +721,6 @@
 				[
 					"",
 					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"match()": {
-			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
-			"Params": [
-				[
-					"start",
-					"Variant",
-					"->"
-				],
-				[
-					"all",
-					"Boolean",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
 					"<-"
 				]
 			],
