@@ -38,10 +38,12 @@ This class uses the 4D command [Match regex](https://doc.4d.com/4Dv20/4D/20.5/Ma
 
 These methods return the same `cs.regex` instance, so they can be chained.
 
-- `.setTarget(target) : cs.regex`
-- `.setPattern(pattern : Text) : cs.regex`
-- `.setOptions(options : Integer) : cs.regex`
-- `.loadPattern(id : Text {;file : 4D.File}) : cs.regex`
+| Function | Action |
+| :-- | :-- |
+| `.setTarget(target) : cs.regex` | Sets the target text for next operations. Supports `Text`, `Blob` (UTF-8) and `4D.File`. |
+| `.setPattern(pattern : Text) : cs.regex` | Sets the current regex pattern. |
+| `.setOptions(options : Integer) : cs.regex` | Sets regex option flags in one call (bits 0..3). |
+| `.loadPattern(id : Text {;file : 4D.File}) : cs.regex` | Loads a named pattern from XML and sets it as current pattern. |
 
 `setTarget()` accepts:
 
@@ -51,18 +53,20 @@ These methods return the same `cs.regex` instance, so they can be chained.
 
 ## Main regex methods
 
-- `.match({start : Integer}{;all : Boolean}) : Boolean`
-- `.extract({groups}) : Collection`
-- `.substitute({replacement : Text}) : Text`
-- `.replace({replacement : Text}) : Text` (alias)
-- `.LookingAt({pattern : Text}) : Boolean`
-- `.lookingAt(target : Text; {pattern : Text}) : Boolean`
-- `.start({index : Integer}) : Integer`
-- `.end({index : Integer}) : Integer`
-- `.length({index : Integer}) : Integer`
-- `.group({index : Integer}) : Text`
-- `.addslashes(in : Text) : Text`
-- `.escape(in : Text) : Text` (alias)
+| Function | Action |
+| :-- | :-- |
+| `.match({start : Integer}{;all : Boolean}) : Boolean` | Tests pattern against target and populates `matches`. Use `all=True` to collect all hits. |
+| `.extract({groups}) : Collection` | Returns extracted match values (all groups or selected groups). |
+| `.substitute({replacement : Text}{;count : Integer}{;position : Integer}) : Text` | Replaces matches in target and returns resulting text. |
+| `.replace({replacement : Text}{;count : Integer}{;position : Integer}) : Text` | Alias of `.substitute()`. |
+| `.LookingAt({pattern : Text}) : Boolean` | Tests whether pattern matches at the beginning of current target. |
+| `.lookingAt(target : Text; {pattern : Text}) : Boolean` | Utility overload to test a provided target without reusing current one. |
+| `.start({index : Integer}) : Integer` | Returns start position (1-based) of nth match/capture. |
+| `.end({index : Integer}) : Integer` | Returns first character position after nth match/capture. |
+| `.length({index : Integer}) : Integer` | Returns length of nth match/capture. |
+| `.group({index : Integer}) : Text` | Returns text of nth match/capture. |
+| `.addslashes(in : Text) : Text` | Escapes regex metacharacters in input text. |
+| `.escape(in : Text) : Text` | Alias of `.addslashes()`. |
 
 ### `matches` object format
 
@@ -77,19 +81,21 @@ The first element of each group corresponds to the full match, followed by captu
 
 ## Helpers / shortcuts
 
-- `.StripTags({allow}) : Text`
-- `.stripTags(target : Text; {allow}) : Text`
-- `.TrimLeading({char : Text}) : Text`
-- `.trimLeading(target : Text; {char : Text}) : Text`
-- `.TrimTrailing({char : Text}) : Text`
-- `.trimTrailing(target : Text; {char : Text}) : Text`
-- `.Trim({char : Text}) : Text`
-- `.trim(target : Text; {char : Text}) : Text`
-- `.extractDates({target}{;pivotYear : Integer}) : Collection`
-- `.extractMailsAdresses({target}{;domains : Collection}) : Collection`
-- `.validateMail(target : Text) : Boolean`
-- `.validateURL(target : Text) : Boolean`
-- `.countWords(target : Text) : Integer`
+| Function | Action |
+| :-- | :-- |
+| `.StripTags({allow}) : Text` | Removes HTML/XML/PHP tags from current target. |
+| `.stripTags(target : Text; {allow}) : Text` | Removes tags from provided target text. |
+| `.TrimLeading({char : Text}) : Text` | Trims leading occurrences from current target. |
+| `.trimLeading(target : Text; {char : Text}) : Text` | Trims leading occurrences from provided target. |
+| `.TrimTrailing({char : Text}) : Text` | Trims trailing occurrences from current target. |
+| `.trimTrailing(target : Text; {char : Text}) : Text` | Trims trailing occurrences from provided target. |
+| `.Trim({char : Text}) : Text` | Trims leading and trailing occurrences from current target. |
+| `.trim(target : Text; {char : Text}) : Text` | Trims leading and trailing occurrences from provided target. |
+| `.extractDates({target}{;pivotYear : Integer}) : Collection` | Extracts date-like values and returns parsed/validated objects. |
+| `.extractMailsAdresses({target}{;domains : Collection}) : Collection` | Extracts likely email addresses and returns structured objects. |
+| `.validateMail(target : Text) : Boolean` | Validates an email address against the class pattern. |
+| `.validateURL(target : Text) : Boolean` | Validates an `http/https` URL with strict structure rules. |
+| `.countWords(target : Text) : Integer` | Counts words in text using regex tokenization. |
 
 ## Constructor
 
@@ -140,7 +146,8 @@ Notes:
 
 - Backrefs use `\\0`, `\\1`, `\\2`, ...
 - Empty/missing replacement removes matched text.
-- Signature includes `count` and `position` parameters internally, but they are currently not applied.
+- Optional `count` limits number of replacements.
+- Optional `position` sets the start position (1-based) for replacement search.
 
 ## `addslashes()` / `escape()`
 
