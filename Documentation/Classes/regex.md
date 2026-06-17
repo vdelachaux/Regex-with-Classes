@@ -106,6 +106,7 @@ The first element of each group corresponds to the full match, followed by captu
 | `.extractDates({target}{;pivotYear : Integer}) : Collection` | Extracts date-like values and returns parsed/validated objects. |
 | `.extractMailsAdresses({target}{;domains : Collection}) : Collection` | Extracts likely email addresses and returns structured objects. |
 | `.validateMail(target : Text) : Boolean` | Validates an email address against the class pattern. |
+| `.isLocalIP(target : Text) : Boolean` | Returns `True` for `localhost` and local/private IPv4 ranges (`127/8`, `169.254/16`, `10/8`, `172.16/12`, `192.168/16`). |
 | `.validateURL(target : Text) : Boolean` | Validates an `http/https` URL with strict structure rules. |
 | `.extractURLs({target : Text}) : Collection` | Extracts likely URLs and returns structured objects {url, protocol, host, port, path, valid}. |
 | `.countWords(target : Text) : Integer` | Counts words in text using regex tokenization. |
@@ -221,6 +222,24 @@ Returns a collection of objects:
 ```
 
 Note: method name keeps the historical typo `Adresses` for backward compatibility.
+
+## `isLocalIP()`
+
+Returns `True` when input is a local/private host:
+
+- `localhost`
+- `127.0.0.0/8` (loopback)
+- `169.254.0.0/16` (link-local)
+- `10.0.0.0/8` (private)
+- `172.16.0.0/12` (private)
+- `192.168.0.0/16` (private)
+
+```4d
+$rgx:=cs.regex.new()
+ASSERT($rgx.isLocalIP("localhost"))
+ASSERT($rgx.isLocalIP("192.168.1.10"))
+ASSERT(Not($rgx.isLocalIP("8.8.8.8")))
+```
 
 ## `validateURL()`
 

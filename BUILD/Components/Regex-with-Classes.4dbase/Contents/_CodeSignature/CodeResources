@@ -6,13 +6,13 @@
 	<dict>
 		<key>Resources/InfoPlist.strings</key>
 		<data>
-		JOnUEIMj5r5xhFLfNd0TelScn30=
+		WOVmDaQx0/cX8MLYGuONmUsYV5E=
 		</data>
 		<key>Resources/en.lproj/syntaxEN.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			FXKnfrRF/ghcctd1W6Qn79+sAQ4=
+			HWTNx3RkWb/rYKNqFS557ozp5Jc=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -32,21 +32,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sTCbTXTI/g0IX/J9w/g6yp93SP37eyNdnNXIUkrUlpk=
+			1bZ1DiSoYD3ucNQ/cIiyet/6UsOPj7SudPUA4MA2xVU=
 			</data>
 		</dict>
 		<key>Libraries/lib4d-arm64.dylib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			aAqHtSaQi9L6ZChjgQccpXCTXX21Qv7CcLHT/yFWfUw=
+			0KCaHtVdYRTKg55kQY9a2OW3+R/aPP3sj2knhoHDeqE=
 			</data>
 		</dict>
 		<key>Regex-with-Classes.4DZ</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			WEyaMNRjtbI4TdZDialta9Ke8sA=
+			F0luFhLa8ijupFDfdXMSVSS2qMY=
 			</data>
 			<key>requirement</key>
 			<string>identifier "Regex-with-Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>
@@ -55,14 +55,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UuNbN9mODWnisiZhio7FMmONfxTV5hgHaWznI0/h8Ws=
+			VbWFZz6jYeI43uhDGbcWlq/yCmjG/ESuVqKoNRKkfQQ=
 			</data>
 		</dict>
 		<key>Resources/en.lproj/syntaxEN.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TqJbxJqFL8NZ0+P7GLCSjlYQrp3byrsM7GpUgdE1zEw=
+			DAhw/T4UROswpz/Wq8F6BxaZZxpJdR5qxf07XrbgOUM=
 			</data>
 			<key>optional</key>
 			<true/>

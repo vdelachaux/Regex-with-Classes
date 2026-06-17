@@ -79,6 +79,22 @@
 			],
 			"Summary": ""
 		},
+		"isLocalIP()": {
+			"Syntax": "**.isLocalIP**( *target* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"addslashes()": {
 			"Syntax": "**.addslashes**( *in* : Text ) : Text",
 			"Params": [

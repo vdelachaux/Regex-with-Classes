@@ -300,6 +300,23 @@ ASSERT:C1129($c[0].path="/over/there?name=ferret")
 ASSERT:C1129(cs:C1710.regex.new("https://developer.4d.com").validateURL())
 ASSERT:C1129(Not:C34(cs:C1710.regex.new("ftp://example.com").validateURL()))
 
+// MARK:- .isLocalIP()
+ASSERT:C1129(cs:C1710.regex.new("localhost").isLocalIP())
+ASSERT:C1129(cs:C1710.regex.new("127.0.0.1").isLocalIP())
+ASSERT:C1129(cs:C1710.regex.new("10.20.30.40").isLocalIP())
+ASSERT:C1129(cs:C1710.regex.new("192.168.1.10").isLocalIP())
+ASSERT:C1129(cs:C1710.regex.new("172.16.0.1").isLocalIP())
+ASSERT:C1129(cs:C1710.regex.new("172.31.255.254").isLocalIP())
+ASSERT:C1129(cs:C1710.regex.new("169.254.10.10").isLocalIP())
+
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("8.8.8.8").isLocalIP()))
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("172.15.10.10").isLocalIP()))
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("172.32.10.10").isLocalIP()))
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("192.169.0.1").isLocalIP()))
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("10.256.0.1").isLocalIP()))
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("localhost.localdomain").isLocalIP()))
+ASSERT:C1129(cs:C1710.regex.new("172.31.255.255").isLocalIP())
+
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
 +"the final comma with \"and\". It will also trim excess spaces around the final "\
