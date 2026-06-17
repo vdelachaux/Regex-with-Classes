@@ -716,6 +716,44 @@ Function replace($replacement : Text; $count : Integer; $position : Integer) : T
 	return This:C1470.substitute($replacement; $count; $position)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Replace first match only.
+	// .replaceFirst(replacement : Text) : Text
+	// .replaceFirst(replacement : Text; target : Text; pattern : Text) : Text
+Function replaceFirst($replacement : Text; $target : Text; $pattern : Text) : Text
+	
+	If (Count parameters:C259>=3)
+		
+		This:C1470.setTarget($target)
+		This:C1470.setPattern($pattern)
+		
+	Else if (Count parameters:C259=2)
+		
+		This:C1470.setPattern($target)
+		
+	End if 
+	
+	return This:C1470.substitute($replacement; 1)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Replace all matches.
+	// .replaceAll(replacement : Text) : Text
+	// .replaceAll(replacement : Text; target : Text; pattern : Text) : Text
+Function replaceAll($replacement : Text; $target : Text; $pattern : Text) : Text
+	
+	If (Count parameters:C259>=3)
+		
+		This:C1470.setTarget($target)
+		This:C1470.setPattern($pattern)
+		
+	Else if (Count parameters:C259=2)
+		
+		This:C1470.setPattern($target)
+		
+	End if 
+	
+	return This:C1470.substitute($replacement)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the pattern matches at the start of the given string
 Function lookingAt($target : Text; $pattern : Text) : Boolean
 	
@@ -761,6 +799,25 @@ Function isMatch($target : Text; $pattern : Text) : Boolean
 			This:C1470.setPattern($target)
 			
 		End if 
+		
+	End if 
+	
+	return This:C1470.match()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if the entire target matches the pattern (with implicit ^ and $).
+	// .fullMatch({pattern : Text}) : Boolean
+	// .fullMatch(target : Text; pattern : Text) : Boolean
+Function fullMatch($target : Text; $pattern : Text) : Boolean
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470.setTarget($target)
+		This:C1470.setPattern("^"+$pattern+"$")
+		
+	Else if (Count parameters:C259=1)
+		
+		This:C1470.setPattern("^"+$target+"$")
 		
 	End if 
 	
@@ -890,6 +947,51 @@ Function split($target; $pattern; $limit) : Collection
 	This:C1470.searchTime:=This:C1470._elapsedTime()
 	
 	return $result
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns all matches as a flat collection, optionally extracting specific groups.
+	// .findAll({groups}) : Collection
+	// .findAll(target : Text; pattern : Text {;groups}) : Collection
+Function findAll($target; $pattern; $groups) : Collection
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+			
+			: ((Value type:C1509($target)=Is text:K8:3) & (Count parameters:C259>=2))
+				
+				This:C1470.setTarget($target)
+				This:C1470.setPattern(String:C10($pattern))
+				
+				If (Count parameters:C259>=3)
+					
+					$groups:=$groups
+					
+				End if 
+				
+			: ((Value type:C1509($target)=Is longint:K8:6) | (Value type:C1509($target)=Is real:K8:4) | (Value type:C1509($target)=Is collection:K8:32) | (Value type:C1509($target)=Is text:K8:3))
+				
+				$groups:=$target
+				
+		End case 
+		
+	End if 
+	
+	If (This:C1470.match(True:C214))
+		
+		If ($groups=Null:C1517)
+			
+			return This:C1470.matches.extract("data")
+			
+		Else 
+			
+			return This:C1470.extract($groups)
+			
+		End if 
+		
+	End if 
+	
+	return []
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 /*
@@ -1268,6 +1370,79 @@ Function validateURL($target : Text) : Boolean
 	This:C1470.pattern:="^https?://(?:localhost|(?:\\d{1,3}\\.){3}\\d{1,3}|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::[0-9]+)?(?:/[A-Za-z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?$"
 	
 	return This:C1470.match()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Extracts likely URLs from target text and returns structured objects.
+	// Returns: {url, protocol, host, port, path, valid}
+Function extractURLs($target : Text) : Collection
+	
+	If ($target#Null:C1517)
+		
+		This:C1470._target:=String:C10($target)
+		
+	End if 
+	
+	This:C1470._pattern:="(https?)://(?:([a-zA-Z0-9.-]+)|(?:(?:\\d{1,3}\\.){3}\\d{1,3}))(?::([0-9]+))?([/A-Za-z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?"
+	
+	var $c:=[]
+	var $indx : Integer:=0
+	var $o : Object
+	
+	If (This:C1470.match(1; True:C214))
+		
+		For each ($o; This:C1470.matches)
+			
+			If ($o._subpattern=0)
+				
+				// Main capture
+				$c.push({\
+					url: $o.data; \
+					protocol: Null:C1517; \
+					host: Null:C1517; \
+					port: Null:C1517; \
+					path: Null:C1517; \
+					valid: True:C214\
+					})
+				
+				$indx:=0
+				
+			Else 
+				
+				// Fill subgroups
+				If ($indx>0)
+					
+					$o:=$c[$c.length-1]
+					
+				End if 
+				
+				Case of 
+					
+					: ($o._subpattern=1)
+						
+						$c[$c.length-1].protocol:=$o.data
+						
+					: ($o._subpattern=2)
+						
+						$c[$c.length-1].host:=$o.data
+						
+					: ($o._subpattern=3)
+						
+						$c[$c.length-1].port:=Num:C11($o.data)
+						
+					: ($o._subpattern=4)
+						
+						$c[$c.length-1].path:=$o.data
+						
+				End case 
+				
+				$indx+=1
+				
+			End if 
+		End for each 
+		
+	End if 
+	
+	return $c
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 /*

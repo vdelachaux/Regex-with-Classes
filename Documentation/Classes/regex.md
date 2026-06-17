@@ -63,6 +63,14 @@ These methods return the same `cs.regex` instance, so they can be chained.
 | `.lookingAt(target : Text; {pattern : Text}) : Boolean` | Utility overload to test a provided target without reusing current one. |
 | `.isMatch(pattern : Text) : Boolean` | Shortcut for matching a pattern against current target. |
 | `.isMatch(target : Text; pattern : Text) : Boolean` | Shortcut for one-shot target+pattern match. |
+| `.fullMatch({pattern : Text}) : Boolean` | Tests if entire target matches pattern (implicit ^ and $). |
+| `.fullMatch(target : Text; pattern : Text) : Boolean` | One-shot full target match. |
+| `.findAll({groups}) : Collection` | Returns all matches as collection, optionally extracting specific groups. |
+| `.findAll(target : Text; pattern : Text {;groups}) : Collection` | One-shot find all with provided target/pattern. |
+| `.replaceFirst(replacement : Text) : Text` | Replaces first match only. |
+| `.replaceFirst(replacement : Text; target : Text; pattern : Text) : Text` | One-shot replace first. |
+| `.replaceAll(replacement : Text) : Text` | Replaces all matches. |
+| `.replaceAll(replacement : Text; target : Text; pattern : Text) : Text` | One-shot replace all. |
 | `.start({index : Integer}) : Integer` | Returns start position (1-based) of nth match/capture. |
 | `.end({index : Integer}) : Integer` | Returns first character position after nth match/capture. |
 | `.length({index : Integer}) : Integer` | Returns length of nth match/capture. |
@@ -99,6 +107,7 @@ The first element of each group corresponds to the full match, followed by captu
 | `.extractMailsAdresses({target}{;domains : Collection}) : Collection` | Extracts likely email addresses and returns structured objects. |
 | `.validateMail(target : Text) : Boolean` | Validates an email address against the class pattern. |
 | `.validateURL(target : Text) : Boolean` | Validates an `http/https` URL with strict structure rules. |
+| `.extractURLs({target : Text}) : Collection` | Extracts likely URLs and returns structured objects {url, protocol, host, port, path, valid}. |
 | `.countWords(target : Text) : Integer` | Counts words in text using regex tokenization. |
 
 ### Compatibility note for trim helpers

@@ -228,6 +228,32 @@ ASSERT:C1129($result.equal(["a"; "b,c"]))
 $result:=$rgx.split("a,b,c"; ","; 3)
 ASSERT:C1129($result.equal(["a"; "b"; "c"]))
 
+// MARK:- .fullMatch()
+$rgx:=cs:C1710.regex.new("Hello world")
+ASSERT:C1129($rgx.fullMatch("Hello world"))
+ASSERT:C1129(Not:C34($rgx.fullMatch("Hello world!")))
+ASSERT:C1129($rgx.fullMatch("(Hello|Hi)\\s\\w+"; "Hello world"))
+
+// MARK:- .findAll()
+$rgx:=cs:C1710.regex.new("cat bat cat"; "\\b\\w{3}\\b")
+$result:=$rgx.findAll()
+ASSERT:C1129($result.equal(["cat"; "bat"; "cat"]))
+
+$rgx:=cs:C1710.regex.new("hello world"; "([a-z]+)\\s([a-z]+)")
+$result:=$rgx.findAll(1)
+ASSERT:C1129($result.equal(["hello"]))
+
+$result:=$rgx.findAll([1; 2])
+ASSERT:C1129($result.equal(["hello"; "world"]))
+
+// MARK:- .replaceFirst() & .replaceAll()
+$rgx:=cs:C1710.regex.new("apple apple apple"; "apple")
+ASSERT:C1129($rgx.replaceFirst("orange")="orange apple apple")
+ASSERT:C1129($rgx.replaceAll("orange")="orange orange orange")
+
+ASSERT:C1129($rgx.replaceFirst("orange"; "apple apple apple"; "apple")="orange apple apple")
+ASSERT:C1129($rgx.replaceAll("orange"; "apple apple apple"; "apple")="orange orange orange")
+
 // Mark:-extract()
 $rgx:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
 $result:=$rgx.extract()
@@ -248,6 +274,19 @@ ASSERT:C1129($rgx.matches.extract("pos").equal([1; 7]))
 ASSERT:C1129($rgx.matches.extract("len").equal([5; 5]))
 ASSERT:C1129($rgx.matches.extract("position").equal([1; 7]))
 ASSERT:C1129($rgx.matches.extract("length").equal([5; 5]))
+
+// MARK:- .extractURLs()
+$rgx:=cs:C1710.regex.new("https://developer.4d.com")
+$c:=$rgx.extractURLs()
+ASSERT:C1129($c.length=1)
+ASSERT:C1129($c[0].url="https://developer.4d.com")
+ASSERT:C1129($c[0].protocol="https")
+ASSERT:C1129($c[0].host="developer.4d.com")
+ASSERT:C1129($c[0].valid)
+
+// MARK:- .validateURL()
+ASSERT:C1129(cs:C1710.regex.new("https://developer.4d.com").validateURL())
+ASSERT:C1129(Not:C34(cs:C1710.regex.new("ftp://example.com").validateURL()))
 
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
