@@ -1204,7 +1204,7 @@ Function Trim($char : Text) : Text
 Function countWords($target : Text) : Integer
 	
 	This:C1470._target:=$target || This:C1470._target
-	This:C1470.pattern:="(?mi-s)((?:[^[:punct:]\\s[:cntrl:]'‘’]+[’'][^[:punct:]\\s[:cntrl:]'‘’]+)|(?:[^[:punct:]\\s[:cntrl:]'‘’]+))"
+	This:C1470.pattern:="(?mi-s)([^[:punct:]\\s[:cntrl:]'‘’-]+(?:[’'\\-][^[:punct:]\\s[:cntrl:]'‘’-]+)*)"
 	
 	return This:C1470.extract().length
 	

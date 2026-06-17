@@ -281,7 +281,6 @@ If (Asserted:C1132($rgx.match(True:C214)))
 End if 
 
 // Mark:-countWords()
-/*
 $target:="This pattern will count the words in a string. \"Words\" are defined as any run "\
 +"of letters or numbers, optionally containing a single apostrophe. For example, "\
 +"\"don't\" is a word, but \"don''t\" counts as two words. Words that start or end "\
@@ -292,10 +291,13 @@ $target:="This pattern will count the words in a string. \"Words\" are defined a
 +"punctuation like \"#$%&$#\" are ignored.\r\rIn the end, if you look at the "\
 +"bottom of this window, you'll see that this little blurb has 118 words."
 
-$regex:=cs.regex.new()
+$regex:=cs:C1710.regex.new()
 
-ASSERT($regex.countWords($target)=118; "Expected: 118")
-*/
+ASSERT:C1129($regex.countWords($target)=118; "Expected: 118")
+
+$target:="State-of-the-art solutions improve well-being and long-term outcomes."
+ASSERT:C1129($regex.countWords($target)=7; "Expected hyphenated words to count as one")
+
 
 // Mark:-extractDates()
 var $c : Collection
