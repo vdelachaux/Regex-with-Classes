@@ -1,0 +1,904 @@
+{
+	"_method_": {},
+	"cs.rgx": {
+		"regex": {
+			"new()": {
+				"Syntax": "**.new**( *target* : Variant; *pattern* : Text )",
+				"Params": [
+					[
+						"target",
+						"Variant",
+						"->"
+					],
+					[
+						"pattern",
+						"Text",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		}
+	},
+	"regex": {
+		"countWords()": {
+			"Syntax": "**.countWords**( *target* : Text ) : Integer",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractMailsAdresses()": {
+			"Syntax": "**.extractMailsAdresses**( *target* : Variant; *domains* : Collection ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"domains",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractDates()": {
+			"Syntax": "**.extractDates**( *target* : Variant; *pivotYear* : Integer ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"pivotYear",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"addslashes()": {
+			"Syntax": "**.addslashes**( *in* : Text ) : Text",
+			"Params": [
+				[
+					"in",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"Trim()": {
+			"Syntax": "**.Trim**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"trim()": {
+			"Syntax": "**.trim**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"split()": {
+			"Syntax": "**.split**( *target* : Variant; *pattern* : Variant; *limit* : Variant ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"pattern",
+					"Variant",
+					"->"
+				],
+				[
+					"limit",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"fullMatch()": {
+			"Syntax": "**.fullMatch**( *target* : Text; *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"LookingAt()": {
+			"Syntax": "**.LookingAt**( *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extractURLs()": {
+			"Syntax": "**.extractURLs**( *target* : Text ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"replaceFirst()": {
+			"Syntax": "**.replaceFirst**( *replacement* : Text; *target* : Text; *pattern* : Text ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"StripTags()": {
+			"Syntax": "**.StripTags**( *allow* : Variant ) : Text",
+			"Params": [
+				[
+					"allow",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"lookingAt()": {
+			"Syntax": "**.lookingAt**( *target* : Text; *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"length()": {
+			"Syntax": "**.length**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set treatTargetAsOneLine()": {
+			"Syntax": "**.set treatTargetAsOneLine**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"replaceAll()": {
+			"Syntax": "**.replaceAll**( *replacement* : Text; *target* : Text; *pattern* : Text ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"replace()": {
+			"Syntax": "**.replace**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"position",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"end()": {
+			"Syntax": "**.end**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"stripTags()": {
+			"Syntax": "**.stripTags**( *target* : Text; *allow* : Variant ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"allow",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"start()": {
+			"Syntax": "**.start**( *index* : Integer ) : Integer",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get count()": {
+			"Syntax": "**.get count**() : Integer",
+			"Params": [
+				[
+					"",
+					"Integer",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"findAll()": {
+			"Syntax": "**.findAll**( *target* : Variant; *pattern* : Variant; *groups* : Variant ) : Collection",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"pattern",
+					"Variant",
+					"->"
+				],
+				[
+					"groups",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"match()": {
+			"Syntax": "**.match**( *start* : Variant; *all* : Boolean ) : Boolean",
+			"Params": [
+				[
+					"start",
+					"Variant",
+					"->"
+				],
+				[
+					"all",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get allowSpaceAndComments()": {
+			"Syntax": "**.get allowSpaceAndComments**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"extract()": {
+			"Syntax": "**.extract**( *groups* : Variant ) : Collection",
+			"Params": [
+				[
+					"groups",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"trimLeading()": {
+			"Syntax": "**.trimLeading**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"group()": {
+			"Syntax": "**.group**( *index* : Integer ) : Text",
+			"Params": [
+				[
+					"index",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set allowSpaceAndComments()": {
+			"Syntax": "**.set allowSpaceAndComments**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"escape()": {
+			"Syntax": "**.escape**( *in* : Text ) : Text",
+			"Params": [
+				[
+					"in",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get pattern()": {
+			"Syntax": "**.get pattern**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"TrimLeading()": {
+			"Syntax": "**.TrimLeading**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set target()": {
+			"Syntax": "**.set target**( *target* : Variant )",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"setOptions()": {
+			"Syntax": "**.setOptions**( *options* : Integer ) : cs.rgx.regex",
+			"Params": [
+				[
+					"options",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.rgx.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isMatch()": {
+			"Syntax": "**.isMatch**( *target* : Text; *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get treatTargetAsOneLine()": {
+			"Syntax": "**.get treatTargetAsOneLine**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"TrimTrailing()": {
+			"Syntax": "**.TrimTrailing**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set pattern()": {
+			"Syntax": "**.set pattern**( *pattern* : Text )",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set caseSensitive()": {
+			"Syntax": "**.set caseSensitive**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"validateMail()": {
+			"Syntax": "**.validateMail**( *target* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"trimTrailing()": {
+			"Syntax": "**.trimTrailing**( *target* : Text; *char* : Text ) : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set caseSensitve()": {
+			"Syntax": "**.set caseSensitve**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get target()": {
+			"Syntax": "**.get target**() : Text",
+			"Params": [
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setPattern()": {
+			"Syntax": "**.setPattern**( *pattern* : Text ) : cs.rgx.regex",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.rgx.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set dotMatchNewLine()": {
+			"Syntax": "**.set dotMatchNewLine**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"validateURL()": {
+			"Syntax": "**.validateURL**( *target* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get dotMatchNewLine()": {
+			"Syntax": "**.get dotMatchNewLine**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get caseSensitve()": {
+			"Syntax": "**.get caseSensitve**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get caseSensitive()": {
+			"Syntax": "**.get caseSensitive**() : Boolean",
+			"Params": [
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setTarget()": {
+			"Syntax": "**.setTarget**( *target* : Variant ) : cs.rgx.regex",
+			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.rgx.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"loadPattern()": {
+			"Syntax": "**.loadPattern**( *ID* : Text; *file* : 4D.File ) : cs.rgx.regex",
+			"Params": [
+				[
+					"ID",
+					"Text",
+					"->"
+				],
+				[
+					"file",
+					"4D.File",
+					"->"
+				],
+				[
+					"",
+					"cs.rgx.regex",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"substitute()": {
+			"Syntax": "**.substitute**( *replacement* : Text; *count* : Integer; *position* : Integer ) : Text",
+			"Params": [
+				[
+					"replacement",
+					"Text",
+					"->"
+				],
+				[
+					"count",
+					"Integer",
+					"->"
+				],
+				[
+					"position",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get lastError()": {
+			"Syntax": "**.get lastError**() : Object",
+			"Params": [
+				[
+					"",
+					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"errors": {
+			"Syntax": "errors : Collection"
+		},
+		"searchTime": {
+			"Syntax": "searchTime : Integer"
+		},
+		"matches": {
+			"Syntax": "matches : Collection"
+		},
+		"success": {
+			"Syntax": "success : Boolean"
+		}
+	}
+}

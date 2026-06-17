@@ -3,18 +3,21 @@
 <plist version="1.0">
   <dict>
     <key>NSHumanReadableCopyright</key>
-    <string>©vdl 2007-2026</string>
+    <string/>
     <key>CFBundleVersion</key>
-    <string>29</string>
+    <string/>
     <key>CFBundleDisplayName</key>
-    <string>Regex with classes</string>
+    <string>Regex-with-Classes</string>
     <key>CFBundleShortVersionString</key>
-    <string>21.1</string>
+    <string/>
     <key>CFBundleGetInfoString</key>
     <string>21.1</string>
     <key>CFBundleLongVersionString</key>
     <string>21.1 (28)</string>
     <key>CFBundleName</key>
     <string>Regex-with-Classes</string>
+    <key>CFBundlePackageType</key>
+    <string>BNDL</string>
   </dict>
+
 </plist>

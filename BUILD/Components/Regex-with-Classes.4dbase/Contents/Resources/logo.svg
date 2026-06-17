@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="a">
+      <stop offset="0" stop-color="#4126e3"/>
+      <stop offset="1" stop-color="#9901db"/>
+    </linearGradient>
+    <linearGradient xlink:href="#a" id="b" x1="407.5" x2="244.9" y1="95.4" y2="228" gradientTransform="translate(88 92) scale(.6636)" gradientUnits="userSpaceOnUse"/>
+  </defs>
+  <path fill="yellow" stroke="#100f15" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M188 377a31 31 0 1 0-61 0 31 31 0 0 0 61 0z"/>
+  <path fill="red" stroke="#100f15" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M289 316v-69l-56 35-20-35 59-32-59-33 20-34 56 34v-69h41v69l57-34 20 34-59 33 59 32-20 35-57-35v69z"/>
+  <path fill="#eee" stroke="#100f15" stroke-dashoffset="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-width="8.1" d="M72 431q-20-29-34-68-14-38-14-80 0-36 11-69 12-39 37-78h18q-17 32-22 46-8 21-13 44-6 29-6 58 0 73 41 147zm372 0h-18q41-74 41-147 0-29-6-58-5-23-13-44-5-14-22-46h18q25 39 38 78 10 33 10 69 0 42-14 80-14 39-34 68z" aria-label="( )" font-family="Arial" font-size="292.6" paint-order="stroke fill markers" style="line-height:100%;-inkscape-font-specification:&quot;Arial, Normal&quot;;text-align:end" text-anchor="end"/>
+</svg>
