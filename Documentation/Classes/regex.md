@@ -61,10 +61,14 @@ These methods return the same `cs.regex` instance, so they can be chained.
 | `.replace({replacement : Text}{;count : Integer}{;position : Integer}) : Text` | Alias of `.substitute()`. |
 | `.LookingAt({pattern : Text}) : Boolean` | Tests whether pattern matches at the beginning of current target. |
 | `.lookingAt(target : Text; {pattern : Text}) : Boolean` | Utility overload to test a provided target without reusing current one. |
+| `.isMatch(pattern : Text) : Boolean` | Shortcut for matching a pattern against current target. |
+| `.isMatch(target : Text; pattern : Text) : Boolean` | Shortcut for one-shot target+pattern match. |
 | `.start({index : Integer}) : Integer` | Returns start position (1-based) of nth match/capture. |
 | `.end({index : Integer}) : Integer` | Returns first character position after nth match/capture. |
 | `.length({index : Integer}) : Integer` | Returns length of nth match/capture. |
 | `.group({index : Integer}) : Text` | Returns text of nth match/capture. |
+| `.split({limit : Integer}) : Collection` | Splits current target using current pattern; optional limit controls max parts. |
+| `.split(target : Text; pattern : Text {;limit : Integer}) : Collection` | One-shot split with provided target/pattern. |
 | `.addslashes(in : Text) : Text` | Escapes regex metacharacters in input text. |
 | `.escape(in : Text) : Text` | Alias of `.addslashes()`. |
 
@@ -85,17 +89,32 @@ The first element of each group corresponds to the full match, followed by captu
 | :-- | :-- |
 | `.StripTags({allow}) : Text` | Removes HTML/XML/PHP tags from current target. |
 | `.stripTags(target : Text; {allow}) : Text` | Removes tags from provided target text. |
-| `.TrimLeading({char : Text}) : Text` | Trims leading occurrences from current target. |
-| `.trimLeading(target : Text; {char : Text}) : Text` | Trims leading occurrences from provided target. |
-| `.TrimTrailing({char : Text}) : Text` | Trims trailing occurrences from current target. |
-| `.trimTrailing(target : Text; {char : Text}) : Text` | Trims trailing occurrences from provided target. |
-| `.Trim({char : Text}) : Text` | Trims leading and trailing occurrences from current target. |
-| `.trim(target : Text; {char : Text}) : Text` | Trims leading and trailing occurrences from provided target. |
+| `.TrimLeading({char : Text}) : Text` | Trims leading occurrences from current target (default: whitespace). |
+| `.trimLeading(target : Text; {char : Text}) : Text` | Trims leading occurrences from provided target (default: whitespace). |
+| `.TrimTrailing({char : Text}) : Text` | Trims trailing occurrences from current target (default: whitespace). |
+| `.trimTrailing(target : Text; {char : Text}) : Text` | Trims trailing occurrences from provided target (default: whitespace). |
+| `.Trim({char : Text}) : Text` | Trims leading and trailing occurrences from current target (default: whitespace). |
+| `.trim(target : Text; {char : Text}) : Text` | Trims leading and trailing occurrences from provided target (default: whitespace). |
 | `.extractDates({target}{;pivotYear : Integer}) : Collection` | Extracts date-like values and returns parsed/validated objects. |
 | `.extractMailsAdresses({target}{;domains : Collection}) : Collection` | Extracts likely email addresses and returns structured objects. |
 | `.validateMail(target : Text) : Boolean` | Validates an email address against the class pattern. |
 | `.validateURL(target : Text) : Boolean` | Validates an `http/https` URL with strict structure rules. |
 | `.countWords(target : Text) : Integer` | Counts words in text using regex tokenization. |
+
+### Compatibility note for trim helpers
+
+4D now provides native string commands for this family:
+
+- `Trim(aString)`
+- `Trim start(aString)`
+- `Trim end(aString)`
+
+The class methods `.Trim()`, `.TrimLeading()` and `.TrimTrailing()` are kept for backward compatibility and fluent `cs.regex` usage.
+
+Behavior check versus native 4D commands:
+
+- Default behavior is aligned with native `Trim*`: they remove whitespace at string boundaries.
+- Class methods add one extra capability: optional `char` lets you trim a specific literal character instead of generic whitespace.
 
 ## Constructor
 

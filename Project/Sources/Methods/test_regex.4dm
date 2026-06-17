@@ -211,6 +211,23 @@ ASSERT:C1129($rgx.lookingAt($target; "Hello"))
 
 ASSERT:C1129(Not:C34($rgx.lookingAt($target; "(?-i)hello")))
 
+// MARK:- .isMatch()
+$rgx:=cs:C1710.regex.new("Hello world")
+ASSERT:C1129($rgx.isMatch("world"))
+ASSERT:C1129($rgx.isMatch("Hello world"; "^Hello"))
+ASSERT:C1129(Not:C34($rgx.isMatch("Hello world"; "^world")))
+
+// MARK:- .split()
+$rgx:=cs:C1710.regex.new("a,b,c"; ",")
+$result:=$rgx.split()
+ASSERT:C1129($result.equal(["a"; "b"; "c"]))
+
+$result:=$rgx.split(2)
+ASSERT:C1129($result.equal(["a"; "b,c"]))
+
+$result:=$rgx.split("a,b,c"; ","; 3)
+ASSERT:C1129($result.equal(["a"; "b"; "c"]))
+
 // Mark:-extract()
 $rgx:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
 $result:=$rgx.extract()
@@ -291,12 +308,12 @@ $target:="This pattern will count the words in a string. \"Words\" are defined a
 +"punctuation like \"#$%&$#\" are ignored.\r\rIn the end, if you look at the "\
 +"bottom of this window, you'll see that this little blurb has 118 words."
 
-$regex:=cs:C1710.regex.new()
+$rgx:=cs:C1710.regex.new()
 
-ASSERT:C1129($regex.countWords($target)=118; "Expected: 118")
+ASSERT:C1129($rgx.countWords($target)=118; "Expected: 118")
 
 $target:="State-of-the-art solutions improve well-being and long-term outcomes."
-ASSERT:C1129($regex.countWords($target)=7; "Expected hyphenated words to count as one")
+ASSERT:C1129($rgx.countWords($target)=7; "Expected hyphenated words to count as one")
 
 
 // Mark:-extractDates()

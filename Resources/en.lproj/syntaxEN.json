@@ -37,44 +37,6 @@
 			],
 			"Summary": ""
 		},
-		"set pattern()": {
-			"Syntax": "**.set pattern**( *pattern* : Text )",
-			"Params": [
-				[
-					"pattern",
-					"Text",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"set caseSensitive()": {
-			"Syntax": "**.set caseSensitive**( *on* : Boolean )",
-			"Params": [
-				[
-					"on",
-					"Boolean",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"TrimTrailing()": {
-			"Syntax": "**.TrimTrailing**( *char* : Text ) : Text",
-			"Params": [
-				[
-					"char",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"set target()": {
 			"Syntax": "**.set target**( *target* : Variant )",
 			"Params": [
@@ -278,8 +240,23 @@
 			"Summary": ""
 		},
 		"split()": {
-			"Syntax": "**.split**() : Collection",
+			"Syntax": "**.split**( *target* : Variant; *pattern* : Variant; *limit* : Variant ) : Collection",
 			"Params": [
+				[
+					"target",
+					"Variant",
+					"->"
+				],
+				[
+					"pattern",
+					"Variant",
+					"->"
+				],
+				[
+					"limit",
+					"Variant",
+					"->"
+				],
 				[
 					"",
 					"Collection",
@@ -517,6 +494,27 @@
 			],
 			"Summary": ""
 		},
+		"isMatch()": {
+			"Syntax": "**.isMatch**( *target* : Text; *pattern* : Text ) : Boolean",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"pattern",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"length()": {
 			"Syntax": "**.length**( *index* : Integer ) : Integer",
 			"Params": [
@@ -551,6 +549,44 @@
 					"",
 					"Boolean",
 					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"TrimTrailing()": {
+			"Syntax": "**.TrimTrailing**( *char* : Text ) : Text",
+			"Params": [
+				[
+					"char",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set pattern()": {
+			"Syntax": "**.set pattern**( *pattern* : Text )",
+			"Params": [
+				[
+					"pattern",
+					"Text",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set caseSensitive()": {
+			"Syntax": "**.set caseSensitive**( *on* : Boolean )",
+			"Params": [
+				[
+					"on",
+					"Boolean",
+					"->"
 				]
 			],
 			"Summary": ""

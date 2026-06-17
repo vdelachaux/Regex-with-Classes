@@ -744,11 +744,152 @@ Function LookingAt($pattern : Text) : Boolean
 	return This:C1470.success
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function split() : Collection
+// Returns True if the pattern matches the target in one call.
+// .isMatch(pattern : Text) : Boolean
+// .isMatch(target : Text; pattern : Text) : Boolean
+Function isMatch($target : Text; $pattern : Text) : Boolean
 	
-	// TODO:split with regex ?
+	If (Count parameters:C259>=2)
+		
+		This:C1470.setTarget($target)
+		This:C1470.setPattern($pattern)
+		
+	Else 
+		
+		If (Count parameters:C259=1)
+			
+			This:C1470.setPattern($target)
+			
+		End if 
+		
+	End if 
 	
-	return []
+	return This:C1470.match()
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+// Split the target using the current (or provided) pattern.
+// .split() : Collection
+// .split(limit : Integer) : Collection
+// .split(target : Text; pattern : Text {;limit : Integer}) : Collection
+Function split($target; $pattern; $limit) : Collection
+	
+	If (Count parameters:C259>=1)
+		
+		Case of 
+			
+			: ((Value type:C1509($target)=Is longint:K8:6) | (Value type:C1509($target)=Is real:K8:4))
+				
+				$limit:=Num:C11($target)
+				
+			: (Value type:C1509($target)=Is text:K8:3)
+				
+				This:C1470._target:=$target
+				
+				If (Count parameters:C259>=2)
+					
+					This:C1470._pattern:=String:C10($pattern)
+					
+				End if 
+				
+				If (Count parameters:C259>=3)
+					
+					$limit:=Num:C11($limit)
+					
+				End if 
+				
+		End case 
+		
+	End if 
+	
+	This:C1470._reset()
+	
+	var $result : Collection:=[]
+	var $source : Text:=This:C1470._target
+	var $sourceLength : Integer:=Length:C16($source)
+	var $maxParts : Integer:=Num:C11($limit)
+	$maxParts:=$maxParts>0 ? $maxParts : 0
+	
+	If ($maxParts=1)
+		
+		$result.push($source)
+		This:C1470.success:=True:C214
+		This:C1470.searchTime:=This:C1470._elapsedTime()
+		
+		return $result
+		
+	End if 
+	
+	If (Length:C16(This:C1470._pattern)=0)
+		
+		$result.push($source)
+		This:C1470.success:=True:C214
+		This:C1470.searchTime:=This:C1470._elapsedTime()
+		
+		return $result
+		
+	End if 
+	
+	ARRAY LONGINT:C221($pos; 0)
+	ARRAY LONGINT:C221($len; 0)
+	
+	var $patternWithOptions : Text:=This:C1470._setOptions(This:C1470._pattern)
+	var $start : Integer:=1
+	var $match : Boolean:=False:C215
+	
+	Repeat 
+		
+		If (($maxParts>0) && ($result.length>=($maxParts-1)))
+			
+			break
+			
+		End if 
+		
+		$match:=Try(Match regex:C1019($patternWithOptions; $source; $start; $pos; $len))
+		
+		If (Last errors:C1799.length>0)
+			
+			This:C1470._pushError(Current method name:C684; Last errors:C1799[0].errCode; Last errors:C1799[0].message)
+			
+			return []
+			
+		End if 
+		
+		If ($match)
+			
+			var $delimPos : Integer:=$pos{0}
+			var $delimLen : Integer:=$len{0}
+			
+			$result.push(Substring:C12($source; $start; $delimPos-$start))
+			This:C1470.matches.push({\
+				index: This:C1470.matches.length; \
+				data: Substring:C12($source; $delimPos; $delimLen); \
+				pos: $delimPos; \
+				len: $delimLen; \
+				position: $delimPos; \
+				length: $delimLen\
+				})
+			This:C1470.success:=True:C214
+			
+			$start:=($delimLen=0) ? $delimPos+1 : $delimPos+$delimLen
+			
+		End if 
+		
+	Until (Not:C34($match))
+	
+	If (($maxParts=0) || ($result.length<$maxParts))
+		
+		If ($start<=($sourceLength+1))
+			
+			$result.push(Substring:C12($source; $start))
+			
+		End if 
+		
+	End if 
+	
+	This:C1470.success:=True:C214
+	This:C1470.searchTime:=This:C1470._elapsedTime()
+	
+	return $result
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 /*
