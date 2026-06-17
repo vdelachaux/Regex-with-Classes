@@ -64,7 +64,7 @@ These methods return the same `cs.regex` instance, so they can be chained.
 | `.isMatch(pattern : Text) : Boolean` | Shortcut for matching a pattern against current target. |
 | `.isMatch(target : Text; pattern : Text) : Boolean` | Shortcut for one-shot target+pattern match. |
 | `.fullMatch({pattern : Text}) : Boolean` | Tests if entire target matches pattern (implicit ^ and $). |
-| `.fullMatch(target : Text; pattern : Text) : Boolean` | One-shot full target match. |
+| `.fullMatch(pattern : Text; target : Text) : Boolean` | One-shot full target match. |
 | `.findAll({groups}) : Collection` | Returns all matches as collection, optionally extracting specific groups. |
 | `.findAll(target : Text; pattern : Text {;groups}) : Collection` | One-shot find all with provided target/pattern. |
 | `.replaceFirst(replacement : Text) : Text` | Replaces first match only. |

@@ -187,16 +187,16 @@ Function get caseSensitve() : Boolean
 Function set caseSensitve($on : Boolean)
 	
 	This:C1470._options:=$on ? This:C1470._options ?+ 0 : This:C1470._options ?- 0
-
+	
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
 	// Backward-compatible alias with corrected spelling.
 Function get caseSensitive() : Boolean
-
+	
 	return This:C1470.caseSensitve
-
+	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 Function set caseSensitive($on : Boolean)
-
+	
 	This:C1470.caseSensitve:=$on
 	
 	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
@@ -726,10 +726,13 @@ Function replaceFirst($replacement : Text; $target : Text; $pattern : Text) : Te
 		This:C1470.setTarget($target)
 		This:C1470.setPattern($pattern)
 		
-	Else if (Count parameters:C259=2)
+	Else 
 		
-		This:C1470.setPattern($target)
-		
+		If (Count parameters:C259=2)
+			
+			This:C1470.setPattern($target)
+			
+		End if 
 	End if 
 	
 	return This:C1470.substitute($replacement; 1)
@@ -745,10 +748,13 @@ Function replaceAll($replacement : Text; $target : Text; $pattern : Text) : Text
 		This:C1470.setTarget($target)
 		This:C1470.setPattern($pattern)
 		
-	Else if (Count parameters:C259=2)
+	Else 
 		
-		This:C1470.setPattern($target)
-		
+		If (Count parameters:C259=2)
+			
+			This:C1470.setPattern($target)
+			
+		End if 
 	End if 
 	
 	return This:C1470.substitute($replacement)
@@ -782,9 +788,9 @@ Function LookingAt($pattern : Text) : Boolean
 	return This:C1470.success
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-// Returns True if the pattern matches the target in one call.
-// .isMatch(pattern : Text) : Boolean
-// .isMatch(target : Text; pattern : Text) : Boolean
+	// Returns True if the pattern matches the target in one call.
+	// .isMatch(pattern : Text) : Boolean
+	// .isMatch(target : Text; pattern : Text) : Boolean
 Function isMatch($target : Text; $pattern : Text) : Boolean
 	
 	If (Count parameters:C259>=2)
@@ -799,7 +805,6 @@ Function isMatch($target : Text; $pattern : Text) : Boolean
 			This:C1470.setPattern($target)
 			
 		End if 
-		
 	End if 
 	
 	return This:C1470.match()
@@ -807,55 +812,62 @@ Function isMatch($target : Text; $pattern : Text) : Boolean
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the entire target matches the pattern (with implicit ^ and $).
 	// .fullMatch({pattern : Text}) : Boolean
-	// .fullMatch(target : Text; pattern : Text) : Boolean
+	// .fullMatch(pattern : Text; target : Text) : Boolean
 Function fullMatch($target : Text; $pattern : Text) : Boolean
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470.setTarget($target)
-		This:C1470.setPattern("^"+$pattern+"$")
-		
-	Else if (Count parameters:C259=1)
-		
 		This:C1470.setPattern("^"+$target+"$")
+		This:C1470.setTarget($pattern)
 		
+	Else 
+		
+		If (Count parameters:C259=1)
+			
+			This:C1470.setPattern("^"+$target+"$")
+			
+		End if 
 	End if 
 	
 	return This:C1470.match()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-// Split the target using the current (or provided) pattern.
-// .split() : Collection
-// .split(limit : Integer) : Collection
-// .split(target : Text; pattern : Text {;limit : Integer}) : Collection
+	// Split the target using the current (or provided) pattern.
+	// .split() : Collection
+	// .split(limit : Integer) : Collection
+	// .split(target : Text; pattern : Text {;limit : Integer}) : Collection
 Function split($target; $pattern; $limit) : Collection
 	
 	If (Count parameters:C259>=1)
 		
 		Case of 
-			
+				
+				//______________________________________________________
 			: ((Value type:C1509($target)=Is longint:K8:6) | (Value type:C1509($target)=Is real:K8:4))
 				
 				$limit:=Num:C11($target)
 				
+				//______________________________________________________
 			: (Value type:C1509($target)=Is text:K8:3)
 				
 				This:C1470._target:=$target
 				
+				//______________________________________________________
 				If (Count parameters:C259>=2)
 					
 					This:C1470._pattern:=String:C10($pattern)
 					
 				End if 
 				
+				//______________________________________________________
 				If (Count parameters:C259>=3)
 					
 					$limit:=Num:C11($limit)
 					
 				End if 
 				
+				//______________________________________________________
 		End case 
-		
 	End if 
 	
 	This:C1470._reset()
@@ -930,7 +942,6 @@ Function split($target; $pattern; $limit) : Collection
 			$start:=($delimLen=0) ? $delimPos+1 : $delimPos+$delimLen
 			
 		End if 
-		
 	Until (Not:C34($match))
 	
 	If (($maxParts=0) || ($result.length<$maxParts))
@@ -954,10 +965,13 @@ Function split($target; $pattern; $limit) : Collection
 	// .findAll(target : Text; pattern : Text {;groups}) : Collection
 Function findAll($target; $pattern; $groups) : Collection
 	
+	$groups:=Null:C1517
+	
 	If (Count parameters:C259>=1)
 		
 		Case of 
-			
+				
+				//______________________________________________________
 			: ((Value type:C1509($target)=Is text:K8:3) & (Count parameters:C259>=2))
 				
 				This:C1470.setTarget($target)
@@ -965,16 +979,36 @@ Function findAll($target; $pattern; $groups) : Collection
 				
 				If (Count parameters:C259>=3)
 					
-					$groups:=$groups
+					If ((Value type:C1509($groups)=Is text:K8:3) && (Length:C16($groups)=0))
+						
+						$groups:=Null:C1517
+						
+					Else 
+						
+						$groups:=$groups
+						
+					End if 
 					
 				End if 
 				
-			: ((Value type:C1509($target)=Is longint:K8:6) | (Value type:C1509($target)=Is real:K8:4) | (Value type:C1509($target)=Is collection:K8:32) | (Value type:C1509($target)=Is text:K8:3))
+				//______________________________________________________
+			: ((Value type:C1509($target)=Is longint:K8:6)\
+				 || (Value type:C1509($target)=Is real:K8:4)\
+				 || (Value type:C1509($target)=Is collection:K8:32)\
+				 || (Value type:C1509($target)=Is text:K8:3))
 				
-				$groups:=$target
+				If ((Value type:C1509($target)=Is text:K8:3) && (Length:C16($target)=0))
+					
+					$groups:=Null:C1517
+					
+				Else 
+					
+					$groups:=$target
+					
+				End if 
 				
+				//______________________________________________________
 		End case 
-		
 	End if 
 	
 	If (This:C1470.match(True:C214))
@@ -988,7 +1022,6 @@ Function findAll($target; $pattern; $groups) : Collection
 			return This:C1470.extract($groups)
 			
 		End if 
-		
 	End if 
 	
 	return []
@@ -1356,7 +1389,6 @@ Function extractMailsAdresses($target; $domains : Collection) : Collection
 				$indx:=0
 				
 			End if 
-			
 		End for each 
 	End if 
 	
@@ -1376,70 +1408,66 @@ Function validateURL($target : Text) : Boolean
 	// Returns: {url, protocol, host, port, path, valid}
 Function extractURLs($target : Text) : Collection
 	
-	If ($target#Null:C1517)
+	If (Count parameters:C259>0)
 		
 		This:C1470._target:=String:C10($target)
 		
 	End if 
 	
-	This:C1470._pattern:="(https?)://(?:([a-zA-Z0-9.-]+)|(?:(?:\\d{1,3}\\.){3}\\d{1,3}))(?::([0-9]+))?([/A-Za-z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?"
+	This:C1470._pattern:="(?mi-s)\\b(?:((?:https?))://((?:localhost|(?:\\d{1,3}\\.){3}\\d{1,3}|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,}))(?::([0-9]+))?([/A-Za-z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?)"
 	
 	var $c:=[]
 	var $indx : Integer:=0
 	var $o : Object
+	var $url : Object
 	
 	If (This:C1470.match(1; True:C214))
 		
 		For each ($o; This:C1470.matches)
 			
-			If ($o._subpattern=0)
-				
-				// Main capture
-				$c.push({\
-					url: $o.data; \
-					protocol: Null:C1517; \
-					host: Null:C1517; \
-					port: Null:C1517; \
-					path: Null:C1517; \
-					valid: True:C214\
-					})
-				
-				$indx:=0
-				
-			Else 
-				
-				// Fill subgroups
-				If ($indx>0)
+			Case of 
 					
-					$o:=$c[$c.length-1]
+					//______________________________________________________
+				: ($indx=0)
 					
-				End if 
-				
-				Case of 
+					$url:={\
+						url: $o.data; \
+						protocol: Null:C1517; \
+						host: Null:C1517; \
+						port: Null:C1517; \
+						path: ""; \
+						valid: True:C214\
+						}
 					
-					: ($o._subpattern=1)
-						
-						$c[$c.length-1].protocol:=$o.data
-						
-					: ($o._subpattern=2)
-						
-						$c[$c.length-1].host:=$o.data
-						
-					: ($o._subpattern=3)
-						
-						$c[$c.length-1].port:=Num:C11($o.data)
-						
-					: ($o._subpattern=4)
-						
-						$c[$c.length-1].path:=$o.data
-						
-				End case 
-				
-				$indx+=1
-				
-			End if 
+					//______________________________________________________
+				: ($indx=1)
+					
+					$url.protocol:=$o.data
+					
+					//______________________________________________________
+				: ($indx=2)
+					
+					$url.host:=$o.data
+					
+					//______________________________________________________
+				: ($indx=3)
+					
+					$url.port:=($o.data="") ? Null:C1517 : Num:C11($o.data)
+					
+					//______________________________________________________
+				: ($indx=4)
+					
+					$url.path:=$o.data
+					
+					$c.push($url)
+					$indx:=-1
+					
+					//______________________________________________________
+			End case 
+			
+			$indx+=1
+			
 		End for each 
-		
 	End if 
 	
 	return $c

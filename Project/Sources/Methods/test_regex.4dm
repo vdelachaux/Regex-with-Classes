@@ -243,6 +243,9 @@ $rgx:=cs:C1710.regex.new("hello world"; "([a-z]+)\\s([a-z]+)")
 $result:=$rgx.findAll(1)
 ASSERT:C1129($result.equal(["hello"]))
 
+$result:=$rgx.findAll(0)
+ASSERT:C1129($result.equal(["hello world"]))
+
 $result:=$rgx.findAll([1; 2])
 ASSERT:C1129($result.equal(["hello"; "world"]))
 
@@ -282,7 +285,16 @@ ASSERT:C1129($c.length=1)
 ASSERT:C1129($c[0].url="https://developer.4d.com")
 ASSERT:C1129($c[0].protocol="https")
 ASSERT:C1129($c[0].host="developer.4d.com")
+ASSERT:C1129($c[0].port=Null:C1517)
 ASSERT:C1129($c[0].valid)
+
+$rgx:=cs:C1710.regex.new("http://localhost:8042/over/there?name=ferret")
+$c:=$rgx.extractURLs()
+ASSERT:C1129($c.length=1)
+ASSERT:C1129($c[0].protocol="http")
+ASSERT:C1129($c[0].host="localhost")
+ASSERT:C1129($c[0].port=8042)
+ASSERT:C1129($c[0].path="/over/there?name=ferret")
 
 // MARK:- .validateURL()
 ASSERT:C1129(cs:C1710.regex.new("https://developer.4d.com").validateURL())
