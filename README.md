@@ -1,8 +1,8 @@
-# Regex-with-Classes
+[![Dev Component](https://img.shields.io/badge/Dev%20Component-blue?logo=4d)](https://developer.4d.com) [![Project Dependencies](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d)](https://developer.4d.com/docs/Project/components/#loading-components)
+<br>
+[![language](https://img.shields.io/github/languages/top/vdelachaux/Regex-with-Classes.svg)](https://developer.4d.com/) ![code-size](https://img.shields.io/github/languages/code-size/vdelachaux/Regex-with-Classes.svg) [![release](https://img.shields.io/github/v/release/vdelachaux/Regex-with-Classes?include_prereleases)](https://github.com/vdelachaux/Regex-with-Classes/releases/latest) [![license](https://img.shields.io/github/license/vdelachaux/Regex-with-Classes)](LICENSE) [![Build](https://github.com/vdelachaux/Regex-with-Classes/actions/workflows/build.yml/badge.svg)](https://github.com/vdelachaux/Regex-with-Classes/actions/workflows/build.yml) ![downloads](https://img.shields.io/github/downloads/vdelachaux/Regex-with-Classes/total)
 
-[![release](https://img.shields.io/github/v/release/vdelachaux/Regex-with-classes?include_prereleases)](https://github.com/vdelachaux/Regex-with-classes/releases/latest)
-[![license](https://img.shields.io/github/license/vdelachaux/Regex-with-classes)](LICENSE)
-[![Build](https://github.com/vdelachaux/Regex-with-Classes/actions/workflows/build.yml/badge.svg)](https://github.com/vdelachaux/Regex-with-Classes/actions/workflows/build.yml)
+# Regex-with-Classes
 
 `Regex-with-Classes` simplifies regular expression usage in 4D with a class-based API.
 
