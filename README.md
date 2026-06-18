@@ -2,6 +2,7 @@
 
 [![release](https://img.shields.io/github/v/release/vdelachaux/Regex-with-classes?include_prereleases)](https://github.com/vdelachaux/Regex-with-classes/releases/latest)
 [![license](https://img.shields.io/github/license/vdelachaux/Regex-with-classes)](LICENSE)
+[![Build](https://github.com/vdelachaux/Regex-with-Classes/actions/workflows/build.yml/badge.svg)](https://github.com/vdelachaux/Regex-with-Classes/actions/workflows/build.yml)
 
 `Regex-with-Classes` simplifies regular expression usage in 4D with a class-based API.
 
