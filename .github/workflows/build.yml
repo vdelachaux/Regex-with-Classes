@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '**.4dm'
+      - '**.yml'
   pull_request:
     paths:
       - '**.4dm'
